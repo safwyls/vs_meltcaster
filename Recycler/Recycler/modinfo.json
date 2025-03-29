@@ -1,0 +1,13 @@
+{
+    "type": "code",
+    "modid": "recycler",
+    "name": "Recycler",
+    "authors": [
+        "safwyls", "murazama"
+    ],
+    "description": "Allows you to recycle metal scraps into base metals and potentially more",
+    "version": "1.0.0",
+    "dependencies": {
+        "game": "1.20.7"
+    }
+}

@@ -1,0 +1,383 @@
+{
+  "code": "recycler",
+  "class": "recycler.blockrecycler",
+  "entityclass": "recycler.blockentityrecycler",
+  "creativeinventory": {
+    "general": [
+      "*-east"
+    ],
+    "recycler": [
+      "*-east"
+    ]
+  },
+  "variantgroups": [
+    {
+      "code": "burnstate",
+      "states": [ "extinct", "lit", "cold" ]
+    },
+    {
+      "code": "side",
+      "loadFromProperties": "abstract/horizontalorientation"
+    }
+  ],
+  "storageFlags": 1,
+  "drawtype": "JSON",
+  "resistance": 1.5,
+  "materialdensity": "3000",
+  "blockmaterial": "Metal",
+  "lightAbsorption": 0,
+  "doNotRenderAtLod2": true,
+  "maxStackSize": 1,
+  "sideopaque": {
+    "all": false
+  },
+  "sidesolid": {
+    "all": false
+  },
+  "requiresBlockEntity": true,
+  "heldTpIdleAnimation": "holdbothhandslarge",
+  "heldRightReadyAnimation": "heldblockready",
+  "heldTpUseAnimation": "twohandplaceblock",
+  "attributes": {
+    "inventoryClassName": "recycler",
+    "defaultType": "normal",
+    "types": [ "normal" ],
+    "drop": {
+      "normal": true
+    },
+    "quantitySlots": {
+      "normal": 1
+    },
+    "dialogTitleLangCode": {
+      "normal": "recyclercontents"
+    },
+    "storageType": {
+      "normal": 189
+    }
+  },
+  "behaviors": [
+    {
+      "name": "HorizontalOrientable",
+      "properties": {
+        "dropBlockFace": "east"
+      }
+    }
+  ],
+  "sounds": {
+    "place": "game:block/plate",
+    "hit": "game:block/plate",
+    "break": "game:block/plate"
+  },
+  "textures": {
+    "fire": { "base": "game:block/fire" },
+    "leaded": { "base": "game:block/glass/leaded" },
+    "normal4": { "base": "game:block/metal/corroded/normal4" },
+    "brass": { "base": "game:block/metal/ingot/brass" },
+    "lead": { "base": "game:block/metal/plate/lead" },
+    "blackbronze2": { "base": "game:block/metal/sheet-plain/blackbronze2" },
+    "bismuthbronze1": { "base": "game:block/metal/sheet/bismuthbronze1" },
+    "tinbronze": { "base": "game:block/metal/sheet/zinc5" },
+    "zinc5": { "base": "game:block/metal/sheet/zinc5" }
+  },
+  "shapebytype": {
+    "*-north": {
+      "base": "block/recycler",
+      "rotateY": 0
+    },
+    "*-east": {
+      "base": "block/recycler",
+      "rotateY": 270
+    },
+    "*-south": {
+      "base": "block/recycler",
+      "rotateY": 180
+    },
+    "*-west": {
+      "base": "block/recycler",
+      "rotateY": 90
+    }
+  },
+  "particlePropertiesByType": {
+    "recycler-lit-*": [
+      {
+        "__comment": "Ember cubicles",
+        "hsvaColor": [
+          {
+            "avg": 30,
+            "var": 20
+          },
+          {
+            "avg": 255,
+            "var": 50
+          },
+          {
+            "avg": 255,
+            "var": 50
+          },
+          {
+            "avg": 255,
+            "var": 0
+          }
+        ],
+        "gravityEffect": {
+          "dist": "invexp",
+          "avg": -0.1,
+          "var": 0.4
+        },
+        "posOffset": [
+          {
+            "avg": 0,
+            "var": 0.2
+          },
+          {
+            "avg": 0,
+            "var": 0
+          },
+          {
+            "avg": 0,
+            "var": 0.2
+          }
+        ],
+        "velocity": [
+          {
+            "avg": 0,
+            "var": 0.15
+          },
+          {
+            "avg": 0.5,
+            "var": 0.1
+          },
+          {
+            "avg": 0,
+            "var": 0.15
+          }
+        ],
+        "quantity": { "avg": 0.015 },
+        "size": {
+          "avg": 0.4,
+          "var": 0
+        },
+        "sizeEvolve": {
+          "transform": "quadratic",
+          "factor": -0.7
+        },
+        "lifeLength": { "avg": 1.5 },
+        "vertexFlags": 128,
+        "windAffectednes": 0
+      },
+      {
+        "__comment": "Smoke quads",
+        "hsvaColor": [
+          {
+            "avg": 0,
+            "var": 0
+          },
+          {
+            "avg": 0,
+            "var": 0
+          },
+          {
+            "avg": 70,
+            "var": 30
+          },
+          {
+            "avg": 220,
+            "var": 50
+          }
+        ],
+        "opacityEvolve": {
+          "transform": "linear",
+          "factor": -255
+        },
+        "gravityEffect": {
+          "avg": 0,
+          "var": 0
+        },
+        "posOffset": [
+          {
+            "avg": 0,
+            "var": 0.2
+          },
+          {
+            "avg": 0,
+            "var": 0
+          },
+          {
+            "avg": 0,
+            "var": 0.2
+          }
+        ],
+        "velocity": [
+          {
+            "avg": 0,
+            "var": 0.025
+          },
+          {
+            "avg": 0.2,
+            "var": 0.05
+          },
+          {
+            "avg": 0,
+            "var": 0.025
+          }
+        ],
+        "quantity": { "avg": 0.08 },
+        "size": {
+          "avg": 0.3,
+          "var": 0.05
+        },
+        "sizeEvolve": {
+          "transform": "linear",
+          "factor": 1.5
+        },
+        "particleModel": "Quad",
+        "lifeLength": { "avg": 18 },
+        "selfPropelled": true,
+        "windAffectednes": 0.7
+      },
+      {
+        "__comment": "Fire quads",
+        "hsvaColor": [
+          {
+            "avg": 20,
+            "var": 20
+          },
+          {
+            "avg": 255,
+            "var": 50
+          },
+          {
+            "avg": 255,
+            "var": 50
+          },
+          {
+            "avg": 255,
+            "var": 0
+          }
+        ],
+        "opacityEvolve": {
+          "transform": "quadratic",
+          "factor": -16
+        },
+        "gravityEffect": {
+          "avg": 0,
+          "var": 0
+        },
+        "posOffset": [
+          {
+            "avg": 0,
+            "var": 0.1
+          },
+          {
+            "avg": 0,
+            "var": 0
+          },
+          {
+            "avg": 0,
+            "var": 0.1
+          }
+        ],
+        "velocity": [
+          {
+            "avg": 0,
+            "var": 0.1
+          },
+          {
+            "avg": 0.125,
+            "var": 0.05
+          },
+          {
+            "avg": 0,
+            "var": 0.1
+          }
+        ],
+        "quantity": { "avg": 1 },
+        "size": {
+          "avg": 0.35,
+          "var": 0.05
+        },
+        "lifeLength": { "avg": 0.25 },
+        "sizeEvolve": {
+          "transform": "linear",
+          "factor": 0.25
+        },
+        "particleModel": "Quad",
+        "vertexFlags": 128,
+        "windAffectednes": 0.5
+      }
+    ]
+  },
+  "tpHandTransform": {
+    "translation": {
+      "x": -0.9,
+      "y": -0.2,
+      "z": -1
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": -80
+    },
+    "origin": {
+      "x": 0.5,
+      "y": 0,
+      "z": 0.5
+    },
+    "scale": 0.5
+  },
+  "guiTransform": {
+    "rotation": {
+      "x": -20,
+      "y": -20,
+      "z": 0
+    },
+    "origin": {
+      "x": 0.5,
+      "y": 0.7,
+      "z": 0.5
+    },
+    "scale": 0.85
+  },
+  "collisionSelectionBoxesByType": {
+    "*-north": [
+      {
+        "x1": 0,
+        "x2": 1,
+        "y1": 0,
+        "y2": 1.55,
+        "z1": 0,
+        "z2": 1
+      }
+    ],
+    "*-east": [
+      {
+        "x1": 0,
+        "x2": 1,
+        "y1": 0,
+        "y2": 1.55,
+        "z1": 0,
+        "z2": 1
+      }
+    ],
+    "*-south": [
+      {
+        "x1": 0,
+        "x2": 1,
+        "y1": 0,
+        "y2": 1.55,
+        "z1": 0,
+        "z2": 1
+      }
+    ],
+    "*-west": [
+      {
+        "x1": 0,
+        "x2": 1,
+        "y1": 0,
+        "y2": 1.55,
+        "z1": 0,
+        "z2": 1
+      }
+    ]
+  }
+}

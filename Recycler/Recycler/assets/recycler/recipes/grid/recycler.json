@@ -1,0 +1,27 @@
+[
+  {
+    "ingredientPattern": "_I_,ZRZ,III",
+    "width": 3,
+    "height": 3,
+    "recipeGroup": 1,
+    "ingredients": {
+      "I": {
+        "type": "item",
+        "code": "game:metalplate-iron",
+        "quantity": "1"
+      },
+      "R": {
+        "type": "item",
+        "code": "game:gear-rusty"
+      },
+      "Z": {
+        "type": "item",
+        "code": "game:metalplate-zinc"
+      }
+    },
+    "output": {
+      "type": "block",
+      "code": "recycler-extinct-east"
+    }
+  }
+]
