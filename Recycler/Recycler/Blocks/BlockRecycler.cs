@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
+using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Util;
@@ -74,12 +75,13 @@ namespace Recycler.Blocks
             interactions = ObjectCacheUtil.GetOrCreate(api, "recyclerInteractions-lit", () =>
             {
                 List<ItemStack> canIgniteStacks = BlockBehaviorCanIgnite.CanIgniteStacks(api, true);
+                var test = Lang.Get("blockhelp-recycler-ignite");
 
                 return new WorldInteraction[]
                 {
                     new WorldInteraction()
                     {
-                        ActionLangCode = "blockhelp-recycler-open",
+                        ActionLangCode = "recycler:blockhelp-recycler-open",
                         MouseButton = EnumMouseButton.Right,
                         ShouldApply = (WorldInteraction wi, BlockSelection blockSelection, EntitySelection entitySelection) =>
                         {
@@ -88,7 +90,7 @@ namespace Recycler.Blocks
                     },
                     new WorldInteraction()
                     {
-                        ActionLangCode = "blockhelp-recycler-ignite",
+                        ActionLangCode = "recycler:blockhelp-recycler-ignite",
                         MouseButton = EnumMouseButton.Right,
                         HotKeyCode = "shift",
                         Itemstacks = canIgniteStacks.ToArray(),
@@ -103,7 +105,7 @@ namespace Recycler.Blocks
                     },
                     new WorldInteraction()
                     {
-                        ActionLangCode = "blockhelp-recycler-refuel",
+                        ActionLangCode = "recycler:blockhelp-recycler-refuel",
                         MouseButton = EnumMouseButton.Right,
                         HotKeyCode = "shift"
                     }
@@ -244,15 +246,9 @@ namespace Recycler.Blocks
                     }
                 }
 
-                if (GetRecycleProps(stack) != null)
+                if (blockSel != null)
                 {
-                    if (!bef.inputSlot.Empty || byPlayer.InventoryManager.ActiveHotbarSlot?.TryPutInto(api.World, bef.inputSlot, 1) == 0)
-                    {
-                        if (blockSel != null)
-                        {
-                            bef.OnPlayerRightClick(byPlayer, blockSel);
-                        }
-                    }
+                    bef.OnPlayerRightClick(byPlayer, blockSel);
 
                     return true;
                 }

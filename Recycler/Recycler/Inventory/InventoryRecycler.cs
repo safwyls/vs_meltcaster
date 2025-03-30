@@ -84,6 +84,11 @@ namespace Recycler.Inventory
 
         public override WeightedSlot GetBestSuitedSlot(ItemSlot sourceSlot, ItemStackMoveOperation op, List<ItemSlot> skipSlots = null)
         {
+            skipSlots ??= new List<ItemSlot>();
+
+            // Never shift items into output slots
+            skipSlots.AddRange(outputSlots);
+
             if (sourceSlot.Itemstack?.Collectible?.CombustibleProps?.BurnTemperature > 0)
             {
                 return new WeightedSlot() { slot = slots[0], weight = 3f }; // Prefer fuel slot

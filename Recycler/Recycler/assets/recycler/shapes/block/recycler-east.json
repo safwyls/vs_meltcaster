@@ -1,52 +1,12 @@
 {
 	"editor": {
-		"collapsedPaths": ",Root/InsideTrim,Root/RecyclerTrimVertN/RecyclerTrimAngledS,Root/RecyclerWall43/RecyclerWall48,Root/RecyclerBase/BarrelTrim,Root/RecyclerTrimVertN/RecyclerTrimAngledW,Root/BarrelTrim/RecyclerWallAngled,Root/origin/RecyclerDoor,Root/RecyclerBase/RecyclerTrimVertN,Root/origin/RecyclerTop,Root/RecyclerTop,Root/RecyclerBase/BarrelTrim/RecyclerWallAngled11,Root/RecyclerBase/BarrelTrim/RecyclerWallAngled,Root/RecyclerBase/RecyclerTrimVertN/RecyclerTrimAngledW,Root/RecyclerTrimVertN,Root/origin/InsideTrim,Root/RecyclerBase/RecyclerWall5,Root/RecyclerBase/BarrelTrim/RecyclerWallAngled29,Root/RecyclerBase/Chimney1/ChimneyDetail,Root,Root/BarrelTrim/RecyclerTrimAngledW,Root/Chimney1/ChimneyDetail,Root/BarrelTrim/RecyclerTrimAngledS,Root/RecyclerBase/RecyclerDoor,Root/origin/Chimney1,Root/BarrelTrim/RecyclerTrimAngledN,Root/RecyclerBase/RecyclerTrimVertN/RecyclerTrimAngledN,Root/RecyclerTrimVertN/RecyclerTrimAngledE,Root/Chimney1,Root/RecyclerDoor,Root/RecyclerBase/RecyclerTrimVertN/RecyclerTrimAngledE,Root/Chimney1/ChimneyDetail/ChimneyDetail8,Root/GrateTrim,Root/RecyclerBase/RecyclerTop,Root/RecyclerBase/InsideTrim,Root/Chimney1/ChimneyDetail/ChimneyDetail4,Root/RecyclerTrimVertN/RecyclerTrimAngledN,Root/RecyclerBase/Chimney1",
+		"collapsedPaths": ",Root/InsideTrim,Root/RecyclerTrimVertN/RecyclerTrimAngledS,Root/RecyclerWall43/RecyclerWall48,Root/RecyclerBase/BarrelTrim,Root/RecyclerTrimVertN/RecyclerTrimAngledW,Root/BarrelTrim/RecyclerWallAngled,Root/origin/RecyclerDoor,Root/RecyclerBase/RecyclerTrimVertN,Root/origin/RecyclerTop,Root/RecyclerTop,Root/RecyclerBase/BarrelTrim/RecyclerWallAngled11,Root/RecyclerBase/BarrelTrim/RecyclerWallAngled,Root/RecyclerBase/RecyclerTrimVertN/RecyclerTrimAngledW,Root/RecyclerTrimVertN,Root/origin/InsideTrim,Root/RecyclerBase/RecyclerWall5,Root/RecyclerBase/BarrelTrim/RecyclerWallAngled29,Root/RecyclerBase/Chimney1/ChimneyDetail,Root/origin/RecyclerTrimVertN,Root,Root/BarrelTrim/RecyclerTrimAngledW,Root/Chimney1/ChimneyDetail,Root/BarrelTrim/RecyclerTrimAngledS,Root/RecyclerBase/RecyclerDoor,Root/origin/Chimney1,Root/BarrelTrim/RecyclerTrimAngledN,Root/RecyclerBase/RecyclerTrimVertN/RecyclerTrimAngledN,Root/RecyclerTrimVertN/RecyclerTrimAngledE,Root/Chimney1,Root/RecyclerDoor,Root/RecyclerBase/RecyclerTrimVertN/RecyclerTrimAngledE,Root/Chimney1/ChimneyDetail/ChimneyDetail8,Root/GrateTrim,Root/RecyclerBase/RecyclerTop,Root/RecyclerBase/InsideTrim,Root/Chimney1/ChimneyDetail/ChimneyDetail4,Root/RecyclerTrimVertN/RecyclerTrimAngledN,Root/RecyclerBase/Chimney1",
 		"allAngles": false,
 		"entityTextureMode": false
 	},
 	"textureWidth": 16,
 	"textureHeight": 16,
 	"textureSizes": {
-		"bismuth5": [16,16],
-		"platinum1": [16,16],
-		"normal4": [16,16],
-		"brass": [16,16],
-		"uranium": [16,16],
-		"zinc": [16,16],
-		"cupronickel": [16,16],
-		"brass2": [16,16],
-		"molybdochalkos": [16,16],
-		"titanium": [16,16],
-		"tin": [16,16],
-		"copper": [16,16],
-		"bismuthbronze": [16,16],
-		"brass3": [16,16],
-		"iron": [16,16],
-		"blackbronze": [16,16],
-		"scale-tinbronze": [16,16],
-		"rusty4": [16,16],
-		"bauxite": [16,16],
-		"basalt": [16,16],
-		"redwood-2x2": [32,32],
-		"larch": [16,16],
-		"bismuthbronze1": [16,16],
-		"bismuth2": [16,16],
-		"bismuthbronze4": [16,16],
-		"brass1": [16,16],
-		"steel1": [16,16],
-		"stainlesssteel1": [16,16],
-		"steel4": [16,16],
-		"steel2": [16,16],
-		"silver4": [16,16],
-		"soldered-copper": [16,16],
-		"uranium5": [16,16],
-		"zinc1": [16,16],
-		"zinc5": [16,16],
-		"bismuth": [16,16],
-		"meteoriciron": [16,16],
-		"steel": [16,16],
-		"tinbronze": [16,16],
-		"lead": [16,16]
 	},
 	"textures": {
 		"fire": "block/fire",
@@ -65,6 +25,7 @@
 			"from": [ 0.0, 0.0, 0.0 ],
 			"to": [ 0.0, 0.0, 0.0 ],
 			"rotationOrigin": [ 8.0, 0.0, 8.0 ],
+			"rotationY": 270.0,
 			"faces": {
 				"north": { "texture": "#leaded", "uv": [ 0.0, 0.0, 0.5, 0.5 ] },
 				"east": { "texture": "#leaded", "uv": [ 0.0, 0.0, 0.5, 0.5 ] },
@@ -1649,14 +1610,12 @@
 				{
 					"frame": 0,
 					"elements": {
-						"origin": { },
 						"RecyclerDoor": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 }
 					}
 				},
 				{
 					"frame": 29,
 					"elements": {
-						"origin": { },
 						"RecyclerDoor": { "rotationX": 67.5, "rotationY": 0.0, "rotationZ": 0.0 }
 					}
 				}

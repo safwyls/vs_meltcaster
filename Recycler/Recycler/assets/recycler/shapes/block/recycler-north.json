@@ -1,6 +1,6 @@
 {
 	"editor": {
-		"collapsedPaths": ",Root/InsideTrim,Root/RecyclerTrimVertN/RecyclerTrimAngledS,Root/RecyclerWall43/RecyclerWall48,Root/RecyclerBase/BarrelTrim,Root/RecyclerTrimVertN/RecyclerTrimAngledW,Root/BarrelTrim/RecyclerWallAngled,Root/origin/RecyclerDoor,Root/RecyclerBase/RecyclerTrimVertN,Root/origin/RecyclerTop,Root/RecyclerTop,Root/RecyclerBase/BarrelTrim/RecyclerWallAngled11,Root/RecyclerBase/BarrelTrim/RecyclerWallAngled,Root/RecyclerBase/RecyclerTrimVertN/RecyclerTrimAngledW,Root/RecyclerTrimVertN,Root/origin/InsideTrim,Root/RecyclerBase/RecyclerWall5,Root/RecyclerBase/BarrelTrim/RecyclerWallAngled29,Root/RecyclerBase/Chimney1/ChimneyDetail,Root,Root/BarrelTrim/RecyclerTrimAngledW,Root/Chimney1/ChimneyDetail,Root/BarrelTrim/RecyclerTrimAngledS,Root/RecyclerBase/RecyclerDoor,Root/origin/Chimney1,Root/BarrelTrim/RecyclerTrimAngledN,Root/RecyclerBase/RecyclerTrimVertN/RecyclerTrimAngledN,Root/RecyclerTrimVertN/RecyclerTrimAngledE,Root/Chimney1,Root/RecyclerDoor,Root/RecyclerBase/RecyclerTrimVertN/RecyclerTrimAngledE,Root/Chimney1/ChimneyDetail/ChimneyDetail8,Root/GrateTrim,Root/RecyclerBase/RecyclerTop,Root/RecyclerBase/InsideTrim,Root/Chimney1/ChimneyDetail/ChimneyDetail4,Root/RecyclerTrimVertN/RecyclerTrimAngledN,Root/RecyclerBase/Chimney1",
+		"collapsedPaths": ",Root/InsideTrim,Root/RecyclerTrimVertN/RecyclerTrimAngledS,Root/RecyclerWall43/RecyclerWall48,Root/RecyclerBase/BarrelTrim,Root/RecyclerTrimVertN/RecyclerTrimAngledW,Root/BarrelTrim/RecyclerWallAngled,Root/origin/RecyclerDoor,Root/RecyclerBase/RecyclerTrimVertN,Root/origin/RecyclerTop,Root/RecyclerTop,Root/RecyclerBase/BarrelTrim/RecyclerWallAngled11,Root/RecyclerBase/BarrelTrim/RecyclerWallAngled,Root/RecyclerBase/RecyclerTrimVertN/RecyclerTrimAngledW,Root/RecyclerTrimVertN,Root/origin/InsideTrim,Root/RecyclerBase/RecyclerWall5,Root/RecyclerBase/BarrelTrim/RecyclerWallAngled29,Root/RecyclerBase/Chimney1/ChimneyDetail,Root/origin/RecyclerTrimVertN,Root,Root/BarrelTrim/RecyclerTrimAngledW,Root/Chimney1/ChimneyDetail,Root/BarrelTrim/RecyclerTrimAngledS,Root/RecyclerBase/RecyclerDoor,Root/origin/Chimney1,Root/BarrelTrim/RecyclerTrimAngledN,Root/RecyclerBase/RecyclerTrimVertN/RecyclerTrimAngledN,Root/RecyclerTrimVertN/RecyclerTrimAngledE,Root/Chimney1,Root/RecyclerDoor,Root/RecyclerBase/RecyclerTrimVertN/RecyclerTrimAngledE,Root/Chimney1/ChimneyDetail/ChimneyDetail8,Root/GrateTrim,Root/RecyclerBase/RecyclerTop,Root/RecyclerBase/InsideTrim,Root/Chimney1/ChimneyDetail/ChimneyDetail4,Root/RecyclerTrimVertN/RecyclerTrimAngledN,Root/RecyclerBase/Chimney1",
 		"allAngles": false,
 		"entityTextureMode": false
 	},
@@ -1649,14 +1649,12 @@
 				{
 					"frame": 0,
 					"elements": {
-						"origin": { },
 						"RecyclerDoor": { "rotationX": 0.0, "rotationY": 0.0, "rotationZ": 0.0 }
 					}
 				},
 				{
 					"frame": 29,
 					"elements": {
-						"origin": { },
 						"RecyclerDoor": { "rotationX": 67.5, "rotationY": 0.0, "rotationZ": 0.0 }
 					}
 				}

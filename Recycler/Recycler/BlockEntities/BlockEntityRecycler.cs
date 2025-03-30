@@ -23,6 +23,11 @@ namespace Recycler.BlockEntities
     {
         private RecyclerConfig? Config = RecyclerModSystem.Config;
 
+        private string? currentInputCode = null;
+        private RecycleOutput? selectedOutput = null;
+        private int itemsRemainingForGroup = 0;
+        private int groupOutputCycleInterval = 2;//16; // Default output cycle length, randomized group output changes every this many items
+
         internal InventoryRecycling inventory;
 
         // Temperature before the half second tick
@@ -55,6 +60,11 @@ namespace Recycler.BlockEntities
 
         public bool IsHot => IsBurning;
         public float emptyFirepitBurnTimeMulBonus = 4f;
+
+        private BlockEntityAnimationUtil animUtil
+        {
+            get { return GetBehavior<BEBehaviorAnimatable>()?.animUtil; }
+        }
 
         #region Config
 
@@ -106,7 +116,7 @@ namespace Recycler.BlockEntities
         public BlockEntityRecycler()
         {
             inventory = new InventoryRecycling(null, null);
-            inventory.SlotModified += OnSlotModifid;
+            inventory.SlotModified += OnSlotModified;
         }
 
         public override void Initialize(ICoreAPI api)
@@ -116,11 +126,57 @@ namespace Recycler.BlockEntities
             inventory.Pos = Pos;
             inventory.LateInitialize("smelting-" + Pos.X + "/" + Pos.Y + "/" + Pos.Z, api);
 
+            inventory.OnInventoryClosed += OnInvClosed;
+            inventory.OnInventoryOpened += OnInvOpened;
+
             RegisterGameTickListener(OnBurnTick, 100);
             RegisterGameTickListener(On500msTick, 500);
+
+            if (api.World.Side == EnumAppSide.Client)
+            {
+                animUtil.InitializeAnimator("recycler:recycler");
+            }
         }
 
-        private void OnSlotModifid(int slotid)
+        protected virtual void OnInvOpened(IPlayer player)
+        {
+            if (Api.Side == EnumAppSide.Client)
+            {
+                OpenDoor();
+            }
+        }
+
+        protected virtual void OnInvClosed(IPlayer player)
+        {
+            if (LidOpenEntityId.Count == 0)
+            {
+                CloseDoor();
+            }
+        }
+
+        public void CloseDoor()
+        {
+            if (animUtil?.activeAnimationsByAnimCode.ContainsKey("lidopen") == true)
+            {
+                animUtil?.StopAnimation("lidopen");
+            }
+        }
+        public void OpenDoor()
+        {
+            if (animUtil?.activeAnimationsByAnimCode.ContainsKey("lidopen") == false)
+            {
+                animUtil?.StartAnimation(new AnimationMetaData()
+                {
+                    Animation = "lidopen",
+                    Code = "lidopen",
+                    AnimationSpeed = 1.8f,
+                    EaseOutSpeed = 6,
+                    EaseInSpeed = 15
+                });
+            }
+        }
+
+        private void OnSlotModified(int slotid)
         {
             Block = Api.World.BlockAccessor.GetBlock(Pos);
 
@@ -288,6 +344,7 @@ namespace Recycler.BlockEntities
             // Begin smelting when hot enough
             if (nowTemp >= recyclePoint)
             {
+                groupOutputCycleInterval = inputSlot.Itemstack.StackSize;
                 float diff = nowTemp / recyclePoint;
                 inputStackCookingTime += GameMath.Clamp((int)(diff), 1, 30) * dt;
             }
@@ -387,11 +444,14 @@ namespace Recycler.BlockEntities
 
         public void RecycleItems()
         {
-            DoRecycle(Api.World, inputSlot, outputSlots);
-            InputStackTemp = enviromentTemperature();
-            inputStackCookingTime = 0;
-            MarkDirty(true);
-            inputSlot.MarkDirty();
+            if (Api.Side == EnumAppSide.Server)
+            {
+                DoRecycle(Api.World, inputSlot, outputSlots);
+                InputStackTemp = enviromentTemperature();
+                inputStackCookingTime = 0;
+                MarkDirty(true);
+                inputSlot.MarkDirty();
+            }
         }
 
         public bool CanRecycle(IWorldAccessor world, ItemStack inputStack)
@@ -425,16 +485,32 @@ namespace Recycler.BlockEntities
             {
                 if (api.World.Rand.NextDouble() >= output.Chance) continue;
 
-                ItemStack? stackToAdd = output.GetResolvedStack();
+                ItemStack? stackToAdd = null;
+
+                if (output.IsGroup)
+                {
+                    if (selectedOutput == null || itemsRemainingForGroup <= 0)
+                    {
+                        selectedOutput = output.WeightedRandomOrFirst(api);
+                        itemsRemainingForGroup = groupOutputCycleInterval;
+                    }
+
+                    stackToAdd = selectedOutput?.GetResolvedStack()?.Clone();
+                }
+                else
+                {
+                    stackToAdd = output.GetResolvedStack()?.Clone();
+                }
+
                 if (stackToAdd == null) continue;
 
-                stackToAdd.StackSize *= stackToAdd.StackSize > 0 ? 1 : 1; // Ensures quantity is respected
+                //stackToAdd.StackSize *= stackToAdd.StackSize > 0 ? 1 : 1; // Ensures quantity is respected
 
                 // Try to merge or insert into output slots
                 bool placed = false;
                 foreach (var slot in outputSlots)
                 {
-                    if (slot.Itemstack == null)
+                    if (slot.Empty)
                     {
                         slot.Itemstack = stackToAdd.Clone();
                         slot.MarkDirty();
@@ -454,24 +530,54 @@ namespace Recycler.BlockEntities
 
                 if (!placed)
                 {
-                    // If none of the output slots can accept the item, you might want to drop it instead
-                    world.SpawnItemEntity(stackToAdd, inputSlot.Inventory.Pos.ToVec3d());
+                    // Try to place in block below if container
+                    BlockPos belowPos = inputSlot.Inventory.Pos.DownCopy();
+                    BlockEntity belowBE = Api.World.BlockAccessor.GetBlockEntity(belowPos);
+
+                    if (belowBE is IBlockEntityContainer containerBE)
+                    {
+                        foreach (var slot in containerBE.Inventory)
+                        {
+                            if (slot.Empty)
+                            {
+                                slot.Itemstack = stackToAdd.Clone();
+                                slot.MarkDirty();
+                                placed = true;
+                                break;
+                            }
+                            if (slot.Itemstack.Collectible.Equals(stackToAdd.Collectible) &&
+                                slot.Itemstack.StackSize + stackToAdd.StackSize <= slot.Itemstack.Collectible.MaxStackSize)
+                            {
+                                slot.Itemstack.StackSize += stackToAdd.StackSize;
+                                slot.MarkDirty();
+                                placed = true;
+                                break;
+                            }
+                        }
+
+                        if (!placed)
+                        {
+                            // If none of the output slots can accept the item, drop it instead
+                            world.SpawnItemEntity(stackToAdd, this.Pos.ToVec3d().Add(new Vec3d(0.5, -0.2, 0.5)));
+                        }
+                    }
                 }
             }
 
             // 4. Decrease input quantity by 1
             inputSlot.TakeOut(1);
             inputSlot.MarkDirty();
+
+            // 5.
+            itemsRemainingForGroup--;
         }
 
         #region Events
 
         public override bool OnPlayerRightClick(IPlayer byPlayer, BlockSelection blockSel)
         {
-            Api.Logger.Notification("[Recycler-BE] Inside right click, attempting to show inv");
             if (Api.Side == EnumAppSide.Client)
             {
-                Api.Logger.Notification("[Recycler-BE] Inside right click, attempting to show inv");
                 toggleInventoryDialogClient(byPlayer, () => {
                     SyncedTreeAttribute dtree = new SyncedTreeAttribute();
                     SetDialogValues(dtree);

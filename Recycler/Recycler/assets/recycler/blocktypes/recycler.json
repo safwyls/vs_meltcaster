@@ -2,6 +2,7 @@
   "code": "recycler",
   "class": "recycler.blockrecycler",
   "entityclass": "recycler.blockentityrecycler",
+  "entityBehaviors": [ { "name": "Animatable" } ],
   "creativeinventory": {
     "general": [
       "*-east"
@@ -34,11 +35,11 @@
   "sidesolid": {
     "all": false
   },
-  "requiresBlockEntity": true,
   "heldTpIdleAnimation": "holdbothhandslarge",
   "heldRightReadyAnimation": "heldblockready",
   "heldTpUseAnimation": "twohandplaceblock",
   "attributes": {
+    "variantByGroup": "side",
     "inventoryClassName": "recycler",
     "defaultType": "normal",
     "types": [ "normal" ],
@@ -77,23 +78,24 @@
     "blackbronze2": { "base": "game:block/metal/sheet-plain/blackbronze2" },
     "bismuthbronze1": { "base": "game:block/metal/sheet/bismuthbronze1" },
     "tinbronze": { "base": "game:block/metal/sheet/zinc5" },
-    "zinc5": { "base": "game:block/metal/sheet/zinc5" }
+    "zinc5": { "base": "game:block/metal/sheet/zinc5" },
+    "mesh5": { "base": "game:block/metal/mesh5" }
   },
   "shapebytype": {
     "*-north": {
-      "base": "block/recycler",
+      "base": "block/recycler-alt",
       "rotateY": 0
     },
     "*-east": {
-      "base": "block/recycler",
+      "base": "block/recycler-alt",
       "rotateY": 270
     },
     "*-south": {
-      "base": "block/recycler",
+      "base": "block/recycler-alt",
       "rotateY": 180
     },
     "*-west": {
-      "base": "block/recycler",
+      "base": "block/recycler-alt",
       "rotateY": 90
     }
   },

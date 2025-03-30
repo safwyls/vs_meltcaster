@@ -7,6 +7,9 @@ using System;
 using Vintagestory.API.Datastructures;
 using ProtoBuf;
 using Vintagestory.API;
+using System.Threading.Channels;
+using System.Linq;
+using Microsoft.VisualBasic.FileIO;
 
 namespace Recycler.Config
 {
@@ -27,7 +30,17 @@ namespace Recycler.Config
                 {
                     foreach (var output in recipe.Outputs)
                     {
-                        output.ItemStack?.Resolve(api.World, domain);
+                        if (output.IsGroup && output.ItemGroup?.Count > 0)
+                        {
+                            foreach (var item in output.ItemGroup)
+                            {
+                                item.ItemStack?.Resolve(api.World, domain);
+                            }
+                        }
+                        else
+                        {
+                            output.ItemStack?.Resolve(api.World, domain);
+                        }
                     }
                 }
             }
@@ -46,19 +59,243 @@ namespace Recycler.Config
                             Code = new AssetLocation("metal-scraps"),
                             Type = EnumItemClass.Block
                         },
-                        RecycleTemp = 600,
+                        RecycleTemp = 150,
                         RecycleTime = 5,
                         Outputs = new List<RecycleOutput>
                         {
                             new()
                             {
-                                ItemStack = new JsonItemStack
+                                IsGroup = true,
+                                Chance = 1f,
+                                ItemGroup = new()
                                 {
-                                    Code = new AssetLocation("metalbit-copper"),
-                                    Type = EnumItemClass.Item,
-                                    StackSize = 2
-                                },
-                                Chance = 1.0f
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-copper"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.5f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-cupronickel"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.2f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-brass"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.3f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-tinbronze"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.5f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-bismuthbronze"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.5f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-blackbronze"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.05f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-electrum"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.05f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-iron"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.05f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-meteoriciron"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.05f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-nickel"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.05f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-steel"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.05f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-blistersteel"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.05f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-gold"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.05f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-lead"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.05f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-chromium"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.05f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-platinum"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.05f
+                                    },
+                                    //new()
+                                    //{
+                                    //    Code = new AssetLocation("metalbit-titanium"),
+                                    //    Type = EnumItemClass.Item,
+                                    //    StackSize = 1
+                                    //},
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-zinc"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.05f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-silver"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.05f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-bismuth"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.05f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-molybdochalkos"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.05f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-leadsolder"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.05f
+                                    },
+                                    new()
+                                    {
+                                        ItemStack = new JsonItemStack
+                                        {
+                                            Code = new AssetLocation("metalbit-silversolder"),
+                                            Type = EnumItemClass.Item,
+                                            StackSize = 1
+                                        },
+                                        Chance = 0.05f
+                                    }
+                                }
                             },
                             new()
                             {
@@ -118,8 +355,38 @@ namespace Recycler.Config
         [JsonProperty("item")]
         public JsonItemStack? ItemStack { get; set; }
 
+        [JsonProperty("items")]
+        public List<RecycleOutput>? ItemGroup { get; set; }
+
+        [JsonProperty("group")]
+        public bool IsGroup { get; set; } = false;
+
         [JsonProperty("chance")]
         public float Chance { get; set; } = 1f;  // 1.0 = 100% chance
+
+        [JsonIgnore]
+        public JsonItemStack? ResolvedItem => IsGroup ? null : ItemStack;
+
+        public RecycleOutput? WeightedRandomOrFirst(ICoreAPI api)
+        {
+            if (ItemGroup != null && ItemGroup.Count > 0)
+            {
+                float totalWeight = ItemGroup.Sum(o => o.Chance);
+                float random = (float)api.World.Rand.NextDouble() * totalWeight;
+
+                float accum = 0f;
+                foreach (RecycleOutput option in ItemGroup)
+                {
+                    accum += option.Chance;
+                    if (accum >= random)
+                    {
+                        return option;
+                    }
+                }
+            }
+
+            return ItemGroup[0];
+        }
 
         public ItemStack? GetResolvedStack()
         {

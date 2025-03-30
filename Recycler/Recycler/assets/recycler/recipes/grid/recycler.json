@@ -1,6 +1,6 @@
 [
   {
-    "ingredientPattern": "_I_,ZRZ,III",
+    "ingredientPattern": "_I_,LRL,III",
     "width": 3,
     "height": 3,
     "recipeGroup": 1,
@@ -12,11 +12,13 @@
       },
       "R": {
         "type": "item",
-        "code": "game:gear-rusty"
+        "code": "game:gear-rusty",
+        "quantity": "1"
       },
-      "Z": {
+      "L": {
         "type": "item",
-        "code": "game:metalplate-zinc"
+        "code": "game:metalplate-lead",
+        "quantity": "1"
       }
     },
     "output": {
