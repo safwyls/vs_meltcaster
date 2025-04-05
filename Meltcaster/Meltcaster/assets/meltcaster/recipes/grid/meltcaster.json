@@ -1,0 +1,225 @@
+[
+  {
+    "ingredientPattern": "_C_,LRL,CIC",
+    "width": 3,
+    "height": 3,
+    "recipeGroup": 1,
+    "ingredients": {
+      "C": {
+        "type": "item",
+        "code": "game:metalplate-copper",
+        "quantity": "1"
+      },
+      "I": {
+        "type": "item",
+        "code": "game:metalplate-iron",
+        "quantity": "1"
+      },
+      "R": {
+          "type": "item",
+          "code": "game:gear-rusty",
+          "quantity": "1"
+        },
+        "L": {
+          "type": "item",
+          "code": "game:metalplate-lead",
+          "quantity": "1"
+        }
+      },
+      "output": {
+        "type": "block",
+        "code": "meltcaster-copper-extinct-east"
+      }
+    },
+  {
+    "ingredientPattern": "_T_,LRL,TIT",
+    "width": 3,
+    "height": 3,
+    "recipeGroup": 1,
+    "ingredients": {
+      "T": {
+        "type": "item",
+        "code": "game:metalplate-tinbronze",
+        "quantity": "1"
+      },
+      "I": {
+        "type": "item",
+        "code": "game:metalplate-iron",
+        "quantity": "1"
+      },
+      "R": {
+        "type": "item",
+        "code": "game:gear-rusty",
+        "quantity": "1"
+      },
+      "L": {
+        "type": "item",
+        "code": "game:metalplate-lead",
+        "quantity": "1"
+      }
+    },
+    "output": {
+      "type": "block",
+      "code": "meltcaster-tinbronze-extinct-east"
+    }
+  },
+  {
+    "ingredientPattern": "_B_,LRL,BIB",
+    "width": 3,
+    "height": 3,
+    "recipeGroup": 1,
+    "ingredients": {
+      "B": {
+        "type": "item",
+        "code": "game:metalplate-bismuthbronze",
+        "quantity": "1"
+      },
+      "I": {
+        "type": "item",
+        "code": "game:metalplate-iron",
+        "quantity": "1"
+      },
+      "R": {
+        "type": "item",
+        "code": "game:gear-rusty",
+        "quantity": "1"
+      },
+      "L": {
+        "type": "item",
+        "code": "game:metalplate-lead",
+        "quantity": "1"
+      }
+    },
+    "output": {
+      "type": "block",
+      "code": "meltcaster-bismuthbronze-extinct-east"
+    }
+  },
+  {
+    "ingredientPattern": "_B_,LRL,BIB",
+    "width": 3,
+    "height": 3,
+    "recipeGroup": 1,
+    "ingredients": {
+      "B": {
+        "type": "item",
+        "code": "game:metalplate-blackbronze",
+        "quantity": "1"
+      },
+      "I": {
+        "type": "item",
+        "code": "game:metalplate-iron",
+        "quantity": "1"
+      },
+      "R": {
+        "type": "item",
+        "code": "game:gear-rusty",
+        "quantity": "1"
+      },
+      "L": {
+        "type": "item",
+        "code": "game:metalplate-lead",
+        "quantity": "1"
+      }
+    },
+    "output": {
+      "type": "block",
+      "code": "meltcaster-blackbronze-extinct-east"
+    }
+  },
+  {
+    "ingredientPattern": "_I_,LRL,III",
+    "width": 3,
+    "height": 3,
+    "recipeGroup": 1,
+    "ingredients": {
+      "I": {
+        "type": "item",
+        "code": "game:metalplate-iron",
+        "quantity": "1"
+      },
+      "R": {
+        "type": "item",
+        "code": "game:gear-rusty",
+        "quantity": "1"
+      },
+      "L": {
+        "type": "item",
+        "code": "game:metalplate-lead",
+        "quantity": "1"
+      }
+    },
+    "output": {
+      "type": "block",
+      "code": "meltcaster-iron-extinct-east"
+    }
+  },
+  {
+    "ingredientPattern": "_S_,LRL,SIS",
+    "width": 3,
+    "height": 3,
+    "recipeGroup": 1,
+    "ingredients": {
+      "S": {
+        "type": "item",
+        "code": "game:metalplate-steel",
+        "quantity": "1"
+      },
+      "I": {
+        "type": "item",
+        "code": "game:metalplate-iron",
+        "quantity": "1"
+      },
+      "R": {
+        "type": "item",
+        "code": "game:gear-rusty",
+        "quantity": "1"
+      },
+      "L": {
+        "type": "item",
+        "code": "game:metalplate-lead",
+        "quantity": "1"
+      }
+    },
+    "output": {
+      "type": "block",
+      "code": "meltcaster-steel-extinct-east"
+    }
+  },
+  {
+    "ingredientPattern": "M",
+    "width": 1,
+    "height": 1,
+    "recipeGroup": 1,
+    "shapeless": true,
+    "ingredients": {
+      "M": {
+        "type": "block",
+        "code": "meltcaster:meltcaster-corroded-extinct-east",
+        "quantity": "1"
+      }
+    },
+    "output": {
+      "type": "block",
+      "code": "meltcaster-iron-extinct-east"
+    }
+  },
+  {
+    "ingredientPattern": "M",
+    "width": 1,
+    "height": 1,
+    "recipeGroup": 1,
+    "shapeless": true,
+    "ingredients": {
+      "M": {
+        "type": "block",
+        "code": "meltcaster:meltcaster-iron-extinct-east",
+        "quantity": "1"
+      }
+    },
+    "output": {
+      "type": "block",
+      "code": "meltcaster-corroded-extinct-east"
+    }
+  }
+]

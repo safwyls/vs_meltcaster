@@ -1,9 +1,0 @@
-{
-  "recyclerguide-title,": "Meltcaster",
-  "recyclerguide-text": "<strong>Meltcaster</strong>The Meltcaster is a machine that can be used to melt down metal scraps into base metals and potentially more.",
-  "blockhelp-recycler-open": "Open",
-  "blockhelp-recycler-ignite": "Ignite",
-  "blockhelp-recycler-refuel": "Refuel",
-  "block-recycler-*": "Meltcaster",
-  "game:tabname-recycler": "Meltcaster"
-}

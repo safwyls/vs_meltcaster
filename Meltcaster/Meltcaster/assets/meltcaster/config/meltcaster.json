@@ -1,0 +1,339 @@
+{
+  "showRecipeInDialog": false,
+  "meltcastList": [
+    {
+      "input": {
+        "Type": 0,
+        "Code": "game:metal-scraps",
+        "StackSize": 1,
+        "Attributes": null,
+        "ResolvedItemstack": null,
+        "Quantity": 1
+      },
+      "meltcastTemp": 1100.0,
+      "meltcastTime": 30.0,
+      "outputs": [
+        {
+          "itemGroup": [
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-copper",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 1.0
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-cupronickel",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.2
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-brass",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.2
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-tinbronze",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.7
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-bismuthbronze",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.6
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-blackbronze",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.5
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-electrum",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.05
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-iron",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.5
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-meteoriciron",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.1
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-nickel",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.3
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-steel",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.4
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-blistersteel",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.2
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-gold",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.1
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-lead",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.3
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-chromium",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.2
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-titanium",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.05
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-zinc",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.3
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-silver",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.2
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-bismuth",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.3
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-molybdochalkos",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.3
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-leadsolder",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.2
+            },
+            {
+              "item": {
+                "Type": 1,
+                "Code": "game:metalbit-silversolder",
+                "StackSize": 1,
+                "Attributes": null,
+                "ResolvedItemstack": null,
+                "Quantity": 1
+              },
+              "isGroup": false,
+              "groupRollInterval": 16,
+              "chance": 0.1
+            }
+          ],
+          "isGroup": true,
+          "groupRollInterval": 16,
+          "chance": 1.0,
+          "groupDesc": "Metal Bits"
+        },
+        {
+          "item": {
+            "Type": 1,
+            "Code": "game:gear-rusty",
+            "StackSize": 1,
+            "Attributes": null,
+            "ResolvedItemstack": null,
+            "Quantity": 1
+          },
+          "isGroup": false,
+          "groupRollInterval": 16,
+          "chance": 0.05
+        },
+        {
+          "item": {
+            "Type": 1,
+            "Code": "game:gear-temporal",
+            "StackSize": 1,
+            "Attributes": null,
+            "ResolvedItemstack": null,
+            "Quantity": 1
+          },
+          "isGroup": false,
+          "groupRollInterval": 16,
+          "chance": 0.01
+        }
+      ]
+    }
+  ]
+}

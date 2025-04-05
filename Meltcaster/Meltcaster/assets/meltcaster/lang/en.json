@@ -1,0 +1,16 @@
+{
+  "meltcasterguide-title,": "Meltcaster",
+  "meltcasterguide-text": "<strong>Introduction</strong><br>This mod adds a new block called the Meltcaster that can process items into base components using pre-defined recipes<br><br><strong><i>New Blocks</i></strong><br><br><strong><a href=\"handbook://meltcaster:meltcaster-copper-extinct-east\">Meltcaster</a></strong><br>The meltcaster is the core of this mod, it is a new block entity with custom model, textures, and animations. Using the meltcaster is fairly similar to using a firepit, you add fuel and your input item and it \"meltcasts\" it into the components defined in the input item's recipe. The component items are held at the meltcast recipe temperature until removed! Use tongs!<br><br><strong><i>Recipes</i></strong><br><br>Recipes are defined in the json config file for this mod, each input item has the following defined attributes<br><br><i>Meltcast Temperature</i>: What temperature the meltcaster must reach to process the input item<br><br><i>Meltcast Time</i>: How long it takes to meltcast the item into its outputs<br><br><i>Outputs</i>: Possible output items with defined chances, outputs can be broken down into groups which have an overall percent chance as well as a relative weighted chance",
+  "blockhelp-meltcaster-open": "Open",
+  "blockhelp-meltcaster-ignite": "Ignite",
+  "blockhelp-meltcaster-refuel": "Refuel",
+  "block-meltcaster-copper-*": "Copper Meltcaster",
+  "block-meltcaster-tinbronze-*": "Tin Bronze Meltcaster",
+  "block-meltcaster-bismuthbronze-*": "Bismuth Bronze Meltcaster",
+  "block-meltcaster-blackbronze-*": "Black Bronze Meltcaster",
+  "block-meltcaster-iron-*": "Iron Meltcaster",
+  "block-meltcaster-steel-*": "Steel Meltcaster",
+  "block-meltcaster-corroded-*": "Corroded Meltcaster",
+  "meltcast-gui-recipeoutput": "Meltcast Output:\n{0}",
+  "game:tabname-meltcaster": "Meltcaster"
+}
