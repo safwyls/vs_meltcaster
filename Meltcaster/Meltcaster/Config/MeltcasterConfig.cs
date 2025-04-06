@@ -1,48 +1,62 @@
-﻿using System.Collections.Generic;
-using Vintagestory.API.Common;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using Vintagestory.API.Common;
 
 namespace Meltcaster.Config
 {
     public class MeltcasterConfig
-    {
-        [JsonProperty("showRecipeInDialog")]
-        public bool ShowRecipeInDialog { get; set; } = false; // show the output item in the dialog when melting
-
-        [JsonProperty("meltcastList")]
+    {        
+        [JsonProperty("meltcastRecipes")]
         public List<MeltcastRecipe>? MeltcastRecipes { get; set; }
+        
+        [JsonProperty("meltcastGroups")]
+        public Dictionary<string, List<MeltcastOutput>>? MeltcastGroups { get; set; }
+        
+        [JsonProperty("commonOutputs")]
+        public Dictionary<string, List<MeltcastOutput>>? CommonOutputs { get; set; }
 
         [JsonIgnore]
         public Dictionary<string, MeltcastRecipe>? MeltcastRecipeByCode { get; private set; }
 
-        public void ResolveAll(ICoreAPI api, string domain = "game")
+        public void ResolveAll(ICoreAPI api)
         {
-            if (MeltcastRecipes == null) return;
+            // Resolve all groups
+            foreach (var group in MeltcastGroups)
+            {
+                foreach (var output in group.Value)
+                {
+                    output.ParentConfig = this;
+                    output.Resolve(api);
+                }
+            }
 
+            // Resolve all recipes
             foreach (var recipe in MeltcastRecipes)
             {
-                recipe.InputJson?.Resolve(api.World, domain);
+                // Resolve the input
+                recipe.Input.Resolve(api);
 
-                if (recipe.Outputs != null)
+                // Resolve each output
+                foreach (var output in recipe.Output)
                 {
-                    foreach (var output in recipe.Outputs)
+                    if (output.IsGroup && output.Group != null)
                     {
-                        if (output.IsGroup && output.ItemGroup?.Count > 0)
+                        foreach (var groupOutput in output.Group)
                         {
-                            foreach (var item in output.ItemGroup)
-                            {
-                                item.ItemStack?.Resolve(api.World, domain);
-                            }
+                            groupOutput.ParentConfig = this;
+                            groupOutput.Resolve(api);
                         }
-                        else
-                        {
-                            output.ItemStack?.Resolve(api.World, domain);
-                        }
+                    }
+                    else
+                    {
+                        output.ParentConfig = this;
+                        output.Resolve(api);
                     }
                 }
 
-                var codeStr = recipe.InputJson?.Code?.ToString();
+                var codeStr = recipe.Input.ItemCode.ToString();
                 if (codeStr != null)
                 {
                     MeltcastRecipeByCode ??= new();
@@ -55,268 +69,140 @@ namespace Meltcaster.Config
         {
             return new MeltcasterConfig
             {
+                // Default recipes
                 MeltcastRecipes = new List<MeltcastRecipe>
                 {
-                    new MeltcastRecipe
+                    new()
                     {
-                        InputJson = new JsonItemStack
+                        Input = new MeltcastInput { ItemCode = "game:metal-scraps", Type= "block", Quantity = 1 },
+                        MeltcastTemp = 1200,
+                        MeltcastTime = 60,
+                        Output = new List<MeltcastOutput>
                         {
-                            Code = new AssetLocation("metal-scraps"),
-                            Type = EnumItemClass.Block
-                        },
-                        MeltcastTemp = 1100,
-                        MeltcastTime = 30,
-                        Outputs = new List<MeltcastOutput>
+                            new() { ItemCode = "metal-bits", Type="group", Quantity = 1, Chance = 1f },
+                            new() { ItemCode = "game:gear-rusty", Type="item", Quantity = 1, Chance = 0.05f },
+                            new() { ItemCode = "game:gear-temporal", Type="item", Quantity = 1, Chance = 0.01f },
+                        }
+                    },
+                    new()
+                    {
+                        Input = new MeltcastInput { ItemCode = "game:metal-parts", Type="block", Quantity = 1 },
+                        MeltcastTemp = 1200,
+                        MeltcastTime = 60,
+                        Output = new List<MeltcastOutput>
                         {
-                            new()
-                            {
-                                IsGroup = true,
-                                GroupRollInterval = 16,
-                                Chance = 1f,
-                                GroupDesc = "Metal Bits",
-                                ItemGroup = new()
-                                {
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-copper"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 1f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-cupronickel"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.2f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-brass"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.2f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-tinbronze"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.7f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-bismuthbronze"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.6f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-blackbronze"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.5f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-electrum"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.05f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-iron"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.5f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-meteoriciron"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.1f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-nickel"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.3f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-steel"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.4f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-blistersteel"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.2f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-gold"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.1f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-lead"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.3f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-chromium"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.2f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-titanium"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.05f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-zinc"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.3f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-silver"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.2f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-bismuth"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.3f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-molybdochalkos"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.3f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-leadsolder"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.2f
-                                    },
-                                    new()
-                                    {
-                                        ItemStack = new JsonItemStack
-                                        {
-                                            Code = new AssetLocation("metalbit-silversolder"),
-                                            Type = EnumItemClass.Item,
-                                            StackSize = 1
-                                        },
-                                        Chance = 0.1f
-                                    }
-                                }
-                            },
-                            new()
-                            {
-                                ItemStack = new JsonItemStack
-                                {
-                                    Code = new AssetLocation("gear-rusty"),
-                                    Type = EnumItemClass.Item,
-                                    StackSize = 1
-                                },
-                                Chance = 0.05f
-                            },
-                            new() {
-                                ItemStack = new JsonItemStack
-                                {
-                                    Code = new AssetLocation("gear-temporal"),
-                                    Type = EnumItemClass.Item,
-                                    StackSize = 1
-                                },
-                                Chance = 0.01f
-                            }
+                            new() { ItemCode = "jonas-metal-bits", Type="group", Quantity = 1, Chance = 1f },
+                            new() { ItemCode = "game:gear-rusty", Type="item", Quantity = 1, Chance = 0.01f },
+                            new() { ItemCode = "game:gear-temporal", Type="item", Quantity = 1, Chance = 0.02f },
+                        }
+                    },
+                    new()
+                    {
+                        Input = new MeltcastInput { ItemCode = "game:jonasframes-gearbox01", Type="item", Quantity = 1 },
+                        MeltcastTemp = 1200,
+                        MeltcastTime = 60,
+                        Output = new List<MeltcastOutput>
+                        {
+                            new() { ItemCode = "game:metal-parts", Type="block", Quantity = 1 },
+                            new() { ItemCode = "game:gear-temporal", Type="item", Quantity = 1 },
+                            new() { ItemCode = "game:rod-cupronickel", Type="item", Quantity = 1 },
+                        }
+                    },
+                    new()
+                    {
+                        Input = new MeltcastInput { ItemCode = "game:jonasframes-gearbox02", Type="item", Quantity = 1 },
+                        MeltcastTemp = 1200,
+                        MeltcastTime = 60,
+                        Output = new List<MeltcastOutput>
+                        {
+                            new() { ItemCode = "meltcaster:jonas-nails-and-strips", Type="group", Quantity = 1, Chance = 1f },
+                            new() { ItemCode = "game:metal-parts", Type="block", Quantity = 1, Chance = 1f },
+                            new() { ItemCode = "game:gear-temporal", Type="item", Quantity = 1, Chance = 1f },
+                            new() { ItemCode = "game:rod-cupronickel", Type="item", Quantity = 1, Chance = 1f },
+                        }
+                    },
+                    new()
+                    {
+                        Input = new MeltcastInput { ItemCode = "game:jonasframes-spring01", Type="item", Quantity = 1 },
+                        MeltcastTemp = 1200,
+                        MeltcastTime = 60,
+                        Output = new List<MeltcastOutput>
+                        {
+                            new() { ItemCode = "meltcaster:jonas-nails-and-strips", Type="group", Quantity = 1, Chance = 1f },
+                            new() { ItemCode = "game:metal-parts", Type="block", Quantity = 1, Chance = 1f },
+                            new() { ItemCode = "game:gear-temporal", Type="item", Quantity = 1, Chance = 1f },
+                            new() { ItemCode = "game:rod-cupronickel", Type="item", Quantity = 1, Chance = 1f },
+                        }
+                    }
+                },
+                // Groups of outputs, used for weighted selection groups
+                MeltcastGroups = new Dictionary<string, List<MeltcastOutput>>
+                {
+                    {
+                        "metal-bits",
+                        new List<MeltcastOutput>
+                        {
+                            new() { ItemCode = "game:metalbit-copper",          Type="item", Quantity = 1, Chance = 1f    },
+                            new() { ItemCode = "game:metalbit-tinbronze",       Type="item", Quantity = 1, Chance = 0.7f  },
+                            new() { ItemCode = "game:metalbit-bismuthbronze",   Type="item", Quantity = 1, Chance = 0.6f  },
+                            new() { ItemCode = "game:metalbit-blackbronze",     Type="item", Quantity = 1, Chance = 0.5f  },
+                            new() { ItemCode = "game:metalbit-iron",            Type="item", Quantity = 1, Chance = 0.5f  },
+                            new() { ItemCode = "game:metalbit-steel",           Type="item", Quantity = 1, Chance = 0.4f  },
+                            new() { ItemCode = "game:metalbit-nickel",          Type="item", Quantity = 1, Chance = 0.3f  },
+                            new() { ItemCode = "game:metalbit-lead",            Type="item", Quantity = 1, Chance = 0.3f  },
+                            new() { ItemCode = "game:metalbit-zinc",            Type="item", Quantity = 1, Chance = 0.3f  },
+                            new() { ItemCode = "game:metalbit-bismuth",         Type="item", Quantity = 1, Chance = 0.3f  },
+                            new() { ItemCode = "game:metalbit-molybdochalkos",  Type="item", Quantity = 1, Chance = 0.3f  },
+                            new() { ItemCode = "game:metalbit-cupronickel",     Type="item", Quantity = 1, Chance = 0.2f  },
+                            new() { ItemCode = "game:metalbit-brass",           Type="item", Quantity = 1, Chance = 0.2f  },
+                            new() { ItemCode = "game:metalbit-chromium",        Type="item", Quantity = 1, Chance = 0.2f  },
+                            new() { ItemCode = "game:metalbit-silver",          Type="item", Quantity = 1, Chance = 0.2f  },
+                            new() { ItemCode = "game:metalbit-leadsolder",      Type="item", Quantity = 1, Chance = 0.2f  },
+                            new() { ItemCode = "game:metalbit-silversolder",    Type="item", Quantity = 1, Chance = 0.1f  },
+                            new() { ItemCode = "game:metalbit-meteoriciron",    Type="item", Quantity = 1, Chance = 0.1f  },
+                            new() { ItemCode = "game:metalbit-gold",            Type="item", Quantity = 1, Chance = 0.1f  },
+                            new() { ItemCode = "game:metalbit-electrum",        Type="item", Quantity = 1, Chance = 0.05f },
+                            new() { ItemCode = "game:metalbit-titanium",        Type="item", Quantity = 1, Chance = 0.05f },
+                        }
+                    },
+                    {
+                        "common-metal-bits",
+                        new List<MeltcastOutput>
+                        {
+                            new() { ItemCode = "game:metalbit-copper",      Type="item", Quantity = 1, Chance = 1f   },
+                            new() { ItemCode = "game:metalbit-tinbronze",   Type="item", Quantity = 1, Chance = 0.8f },
+                            new() { ItemCode = "game:metalbit-iron",        Type="item", Quantity = 1, Chance = 0.7f },
+                            new() { ItemCode = "game:metalbit-steel",       Type="item", Quantity = 1, Chance = 0.5f }
+                        }
+                    },
+                    {
+                        "jonas-metal-bits",
+                        new List<MeltcastOutput>
+                        {
+                            new() { ItemCode = "game:metalbit-cupronickel", Type="item", Quantity = 1, Chance = 1f   },
+                            new() { ItemCode = "game:metalbit-iron",        Type="item", Quantity = 1, Chance = 0.7f },
+                            new() { ItemCode = "game:metalbit-steel",       Type="item", Quantity = 1, Chance = 0.5f }
+                        }
+                    },
+                    {
+                        "jonas-nails-and-strips",
+                        new List<MeltcastOutput>
+                        {
+                            new() { ItemCode="game:metalnailsandstrips-cupronickel",    Type="item", Quantity = 1, Chance = 1f },
+                            new() { ItemCode="game:metalnailsandstrips-iron",           Type="item", Quantity = 1, Chance = 1f },
+                            new() { ItemCode="game:metalnailsandstrips-steel",          Type="item", Quantity = 1, Chance = 1f }
+                        }
+                    },
+                    {
+                        "nails-and-strips",
+                        new List<MeltcastOutput>
+                        {
+                            new() { ItemCode="game:metalnailsandstrips-copper",         Type="item", Quantity = 1, Chance = 1f },
+                            new() { ItemCode="game:metalnailsandstrips-tinbronze",      Type="item", Quantity = 1, Chance = 1f },
+                            new() { ItemCode="game:metalnailsandstrips-bismuthbronze",  Type="item", Quantity = 1, Chance = 1f },
+                            new() { ItemCode="game:metalnailsandstrips-blackbronze",    Type="item", Quantity = 1, Chance = 1f },
+                            new() { ItemCode="game:metalnailsandstrips-iron",           Type="item", Quantity = 1, Chance = 1f },
+                            new() { ItemCode="game:metalnailsandstrips-steel",          Type="item", Quantity = 1, Chance = 1f }
                         }
                     }
                 }
@@ -326,64 +212,113 @@ namespace Meltcaster.Config
 
     public class MeltcastRecipe
     {
-        [JsonProperty("input")]
-        public JsonItemStack? InputJson { get; set; }
-
-        [JsonProperty("meltcastTemp")]
+        public MeltcastInput? Input { get; set; }
         public float MeltcastTemp { get; set; }
-
-        [JsonProperty("meltcastTime")]
         public float MeltcastTime { get; set; }
+        public List<MeltcastOutput>? Output { get; set; }
+    }
 
-        [JsonProperty("outputs")]
-        public List<MeltcastOutput>? Outputs { get; set; }
+    public class MeltcastInput
+    { 
+        // Serialized properties
+        public required string? ItemCode { get; set; }
+        
+        public required string Type { get; set; }
+        
+        public int Quantity { get; set; } = 1;
 
-        public void Resolve(ICoreAPI api, string domain)
-        {
-            InputJson?.Resolve(api.World, domain);
-            if (Outputs == null) return;
-            foreach (var output in Outputs)
-            {
-                output.ItemStack?.Resolve(api.World, domain);
-            }
-        }
+        // Non-serialized properties
+        [JsonIgnore]
+        public string? Domain => ItemCode?.Split(':')[0] ?? "meltcaster";
 
         [JsonIgnore]
-        public ItemStack? InputStack => InputJson?.ResolvedItemstack?.Clone();
+        public ItemStack? ResolvedStack { get; set; }
+
+        public void Resolve(ICoreAPI api)
+        {
+            if (ItemCode == null) return;
+
+            // Try to get the type from the output code
+            bool valid = Enum.TryParse(Type, true, out EnumItemClass type);
+            if (!valid) return;
+
+            // Build a JsonItemStack from the output code
+            JsonItemStack json = new JsonItemStack()
+            {
+                Type = type,
+                Code = ItemCode,
+                StackSize = Quantity
+            };
+
+            // Resolve
+            json.Resolve(api.World, Domain);
+
+            // Clone
+            if (json.ResolvedItemstack == null) return;
+            ResolvedStack = json.ResolvedItemstack.Clone();
+        }
     }
 
     public class MeltcastOutput
     {
-        [JsonProperty("item", NullValueHandling = NullValueHandling.Ignore)]
-        public JsonItemStack? ItemStack { get; set; }
+        // Serialized properties
+        public required string? ItemCode { get; set; }
 
-        [JsonProperty("isGroup", NullValueHandling = NullValueHandling.Ignore)]
-        public bool IsGroup { get; set; } = false; 
+        public required string? Type { get; set; }
 
-        [JsonProperty("groupRollInterval", NullValueHandling = NullValueHandling.Ignore)]
-        public int? GroupRollInterval { get; set; } // this is the interval to roll for a new item type
+        public int Quantity { get; set; } = 1;
 
-        [JsonProperty("groupDesc", NullValueHandling = NullValueHandling.Ignore)]
-        public string? GroupDesc { get; set; } // Group item description for gui
+        public float Chance { get; set; } = 1f;
 
-        [JsonProperty("chance")]
-        public float Chance { get; set; } = 1f; // 1.0 = 100% chance, group items are relatively weights within the overall group chance
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? GroupRollInterval { get; set; } // How often to reroll the group output. 16 = every 16 items.
 
-        [JsonProperty("itemGroup", NullValueHandling = NullValueHandling.Ignore)]
-        public List<MeltcastOutput>? ItemGroup { get; set; }
+        // / Non-serialized properties
+        [JsonIgnore]
+        public string? Domain => ItemCode?.Split(':')[0] ?? "meltcaster";
 
         [JsonIgnore]
-        public JsonItemStack? ResolvedItem => IsGroup ? null : ItemStack;
+        public bool IsGroup => Type == "group";
 
-        public MeltcastOutput? WeightedRandomOrFirst(ICoreAPI api)
+        [JsonIgnore]
+        public string? Description => string.Join(" ", ItemCode.Contains(':') ? ItemCode.Split(':')[1].Split('-').Select(word => char.ToUpperInvariant(word[0]) + word.Substring(1)) : ItemCode.Split('-').Select(word => char.ToUpperInvariant(word[0]) + word.Substring(1)));
+
+        [JsonIgnore]
+        public ItemStack? ResolvedStack { get; set; }
+
+        [JsonIgnore]
+        public MeltcasterConfig? ParentConfig { get; set; }
+
+        [JsonIgnore]
+        public List<MeltcastOutput>? Group
         {
-            if (ItemGroup != null && ItemGroup.Count > 0)
+            get
             {
-                float totalWeight = ItemGroup.Sum(o => o.Chance);
+                if (ItemCode == null  || ParentConfig == null) return null;
+                if (ParentConfig.MeltcastGroups.TryGetValue(ItemCode, out var group))
+                {
+                    return group;
+                }
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Returns a weighted random output from the group
+        /// </summary>
+        /// <param name="api"></param>
+        /// <returns></returns>
+        public MeltcastOutput? WeightedRandom(ICoreAPI api)
+        {
+            if (Group == null) return null;
+            
+            if (Group.Count > 0)
+            {
+                float totalWeight = Group.Sum(o => o.Chance);
                 float random = (float)api.World.Rand.NextDouble() * totalWeight;
 
                 float accum = 0f;
-                foreach (MeltcastOutput option in ItemGroup)
+                foreach (MeltcastOutput option in Group)
                 {
                     accum += option.Chance;
                     if (accum >= random)
@@ -393,12 +328,31 @@ namespace Meltcaster.Config
                 }
             }
 
-            return ItemGroup?[0];
+            return null;
         }
 
-        public ItemStack? GetResolvedStack()
+        public void Resolve(ICoreAPI api)
         {
-            return ItemStack?.ResolvedItemstack?.Clone();
+            if (ItemCode == null) return;
+
+            // Try to get the type from the output code
+            bool valid = Enum.TryParse(Type, true, out EnumItemClass type);
+            if (!valid) return;
+
+            // Build a JsonItemStack from the output code
+            JsonItemStack json = new JsonItemStack()
+            {
+                Type = type,
+                Code = ItemCode,
+                StackSize = Quantity
+            };
+
+            // Resolve
+            json.Resolve(api.World, Domain);
+
+            // Clone
+            if (json.ResolvedItemstack == null) return;
+            ResolvedStack = json.ResolvedItemstack.Clone();
         }
     }
 }

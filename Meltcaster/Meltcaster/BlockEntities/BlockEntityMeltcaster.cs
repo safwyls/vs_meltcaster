@@ -519,14 +519,14 @@ namespace Meltcaster.BlockEntities
 
             // 2. Get the item's Meltcast properties
             MeltcastRecipe? recipe = GetMeltcastProps(inputSlot.Itemstack);
-            if (recipe == null || recipe.Outputs == null) return;
+            if (recipe == null || recipe.Output == null) return;
 
             ICoreAPI api = world.Api;
 
             currentRecipeTemperature = recipe.MeltcastTemp;
 
             // 3. For each possible output, roll for chance and add to output slots
-            foreach (var output in recipe.Outputs)
+            foreach (var output in recipe.Output)
             {
                 if (api.World.Rand.NextDouble() >= output.Chance) continue;
 
@@ -536,15 +536,15 @@ namespace Meltcaster.BlockEntities
                 {
                     if (selectedOutput == null || itemsRemainingForGroup <= 0)
                     {
-                        selectedOutput = output.WeightedRandomOrFirst(api);
-                        itemsRemainingForGroup = output.GroupRollInterval;
+                        selectedOutput = output.WeightedRandom(api);
+                        itemsRemainingForGroup = output.GroupRollInterval ?? 16;
                     }
 
-                    stackToAdd = selectedOutput?.GetResolvedStack()?.Clone();
+                    stackToAdd = selectedOutput?.ResolvedStack?.Clone();
                 }
                 else
                 {
-                    stackToAdd = output.GetResolvedStack()?.Clone();
+                    stackToAdd = output.ResolvedStack?.Clone();
                 }
 
                 if (stackToAdd == null) continue;
@@ -719,7 +719,7 @@ namespace Meltcaster.BlockEntities
                 dialogTree.RemoveAttribute("oreTemperature");
             }
 
-            if (Config.ShowRecipeInDialog)
+            if (false)
             {
                 dialogTree.SetString("outputText", inventory.GetOutputText());
             }

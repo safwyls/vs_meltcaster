@@ -123,54 +123,10 @@ namespace Meltcaster.Inventory
             return base.GetBestSuitedSlot(sourceSlot, op, skipSlots);
         }
 
+        // To Do: Implement output text info
         public string GetOutputText()
         {
-            ItemStack inputStack = slots[1].Itemstack;
-
-            if (inputStack == null) return null;
-
-            if (inputStack.Collectible is BlockSmeltingContainer)
-            {
-                return ((BlockSmeltingContainer)inputStack.Collectible).GetOutputText(Api.World, this, slots[1]);
-            }
-            if (inputStack.Collectible is BlockCookingContainer)
-            {
-                return ((BlockCookingContainer)inputStack.Collectible).GetOutputText(Api.World, this, slots[1]);
-            }
-
-            List<MeltcastOutput> outputs = Config?.MeltcastRecipeByCode?.TryGetValue(inputStack.Collectible.Code.ToString())?.Outputs;
-
-            if (outputs == null) return null;
-
-            string outputText = "";
-            foreach (MeltcastOutput output in outputs)
-            {
-                if (output == null) continue;
-                if (output.IsGroup)
-                {
-                    outputText += $"\t{output?.GroupDesc} - {output?.Chance * 100}%\n";
-
-                    // Don't show all outputs in group, just show the overall chance and group desc
-                    //foreach(var item in output?.ItemGroup)
-                    //{
-                    //    if (item.ResolvedItem == null) continue;
-
-                    //    ItemStack? outputStack = item?.GetResolvedStack();
-                    //    if (outputStack == null) continue;
-                    //    outputText += $"\t{outputStack?.StackSize}x {outputStack?.GetName()} - {item?.Chance * 100}%\n";
-                    //}
-                }
-                else
-                {
-                    if (output.ResolvedItem == null) continue;
-
-                    ItemStack? outputStack = output?.GetResolvedStack();
-                    if (outputStack == null) continue;
-                    outputText += $"\t{outputStack?.GetName()} - {output?.Chance * 100}%\n";
-                }
-            }
-
-            return Lang.Get("meltcaster:meltcast-gui-recipeoutput", outputText);
+            return Lang.Get("meltcaster:meltcast-gui-recipeoutput", "TEST");
         }
 
     }
