@@ -1,14 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿using HarmonyLib;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json.Nodes;
+using System.Threading.Channels;
 using Vintagestory.API.Common;
 
 namespace Meltcaster.Config
 {
     public class MeltcasterConfig
     {
-        public int TemporalBurnRate { get; set; } = 5;
         public required List<MeltcastRecipe> MeltcastRecipes { get; set; }
 
         [JsonIgnore]
@@ -19,11 +19,19 @@ namespace Meltcaster.Config
             foreach(var recipe in MeltcastRecipes)
             {
                 recipe?.Input?.Resolve(world, domain);
+                if (recipe?.Input.ResolvedItemstack is null)
+                {
+                    world.Logger.Error($"[Meltcaster] Failed to resolve input itemstack for recipe input: {recipe?.Input?.Code}");
+                }
 
                 if (recipe?.Output == null) return;
                 foreach (var output in recipe.Output)
                 {
                     output.Resolve(world, domain);
+                    if (output.ResolvedItemstack is null && !output.IsGroup)
+                    {
+                        world.Logger.Error($"[Meltcaster] Failed to resolve recipe output itemstack: {output.Code}");
+                    }
                 }
 
                 if (recipe.Input.Code != null)
@@ -32,6 +40,56 @@ namespace Meltcaster.Config
                     MeltcastRecipeByCode[recipe.Input.Code] = recipe;
                 }
             }
+        }
+
+        /// <summary>
+        /// Backup method in case mod fails to load config from assets folder
+        /// This should only contain one recipe to keep this class clean
+        /// </summary>
+        /// <returns></returns>
+        public static MeltcasterConfig GetDefault()
+        {
+            return new MeltcasterConfig() {
+                MeltcastRecipes = new List<MeltcastRecipe>()
+                {
+                    new()
+                    {
+                        Input = new() { Code = "game:metal-scraps", Type = EnumItemClass.Block },
+                        MeltcastTemp = 1200,
+                        MeltcastTime = 60,
+                        Output = new List<MeltcastOutput>()
+                        {
+                            new() { Code = "meltcast:g-metal-bits", StackSize = 1, Chance = 1,
+                                Group = new() {
+                                    new() { Code = "game:metalbit-copper", Type = EnumItemClass.Item, StackSize = 1, Chance = 1f },
+                                    new() { Code = "game:metalbit-tinbronze", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.7f },
+                                    new() { Code = "game:metalbit-bismuthbronze", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.6f },
+                                    new() { Code = "game:metalbit-blackbronze", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.5f },
+                                    new() { Code = "game:metalbit-iron", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.5f },
+                                    new() { Code = "game:metalbit-steel", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.4f },
+                                    new() { Code = "game:metalbit-nickel", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.3f },
+                                    new() { Code = "game:metalbit-lead", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.3f },
+                                    new() { Code = "game:metalbit-zinc", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.3f },
+                                    new() { Code = "game:metalbit-bismuth", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.3f },
+                                    new() { Code = "game:metalbit-molybdochalkos", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.3f },
+                                    new() { Code = "game:metalbit-cupronickel", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.2f },
+                                    new() { Code = "game:metalbit-brass", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.2f },
+                                    new() { Code = "game:metalbit-chromium", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.2f },
+                                    new() { Code = "game:metalbit-silver", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.2f },
+                                    new() { Code = "game:metalbit-leadsolder", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.2f },
+                                    new() { Code = "game:metalbit-silversolder", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.1f },
+                                    new() { Code = "game:metalbit-meteoriciron", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.1f },
+                                    new() { Code = "game:metalbit-gold", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.1f },
+                                    new() { Code = "game:metalbit-electrum", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.05f },
+                                    new() { Code = "game:metalbit-titanium", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.05f },
+                                }
+                            },
+                            new() { Code = "game:gear-rusty", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.05f },
+                            new() { Code = "game:gear-temporal", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.01f },
+                        }
+                    }
+                }
+            };
         }
     }
 
@@ -96,6 +154,10 @@ namespace Meltcaster.Config
                 foreach (var output in Group)
                 {
                     output.Resolve(resolver, sourceForErrorLogging, printWarningOnError);
+                    if (output.ResolvedItemstack is null)
+                    {
+                        resolver.Logger.Error($"[Meltcaster] Failed to resolve recipe output itemstack for Group: {Code}, output: {output.Code}");
+                    }
                 }
 
                 return true;

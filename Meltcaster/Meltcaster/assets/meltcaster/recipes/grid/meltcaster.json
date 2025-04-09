@@ -201,7 +201,7 @@
     },
     "output": {
       "type": "block",
-      "code": "meltcaster-iron-extinct"
+      "code": "meltcaster-steel-extinct"
     }
   },
   {
@@ -213,61 +213,13 @@
     "ingredients": {
       "M": {
         "type": "block",
-        "code": "meltcaster:meltcaster-iron-extinct",
+        "code": "meltcaster:meltcaster-steel-extinct",
         "quantity": "1"
       }
     },
     "output": {
       "type": "block",
       "code": "meltcaster-corroded-extinct"
-    }
-  },
-  {
-    "ingredientPattern": "_M_,DTV,CAP",
-    "width": 3,
-    "height": 3,
-    "recipeGroup": 1,
-    "ingredients": {
-      "M": {
-        "type": "block",
-        "code": "meltcaster:meltcaster-*-extinct",
-        "name": "material",
-        "quantity": 1
-      },
-      "D": {
-        "type": "item",
-        "code":  "game:jonasparts-cylinder01",
-        "quantity": 4
-      },
-      "T": {
-        "type": "item",
-        "code": "game:gear-temporal",
-        "quantity": 1
-      },
-      "V": {
-        "type": "item",
-        "code":  "game:jonasparts-tank01",
-        "quantity": 1
-      },
-      "C": {
-        "type": "item",
-        "code":  "game:jonasparts-connector01",
-        "quantity": 1
-      },
-      "A": {
-        "type": "item",
-        "code":  "game:jonasparts-cylinder02",
-        "quantity": 1
-      },
-      "P": {
-        "type": "block",
-        "code":  "game:metal-parts",
-        "quantity": 3
-      }
-    },
-    "output": {
-      "type": "block",
-      "code": "meltcaster-{material}-temporal"
     }
   }
 ]

@@ -1,6 +1,8 @@
 ﻿using Meltcaster.BlockEntities;
 using Meltcaster.Blocks;
 using Meltcaster.Config;
+using System;
+using System.IO;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 
@@ -14,8 +16,6 @@ namespace Meltcaster
         private FileWatcher? _fileWatcher;
         private bool assetsFinalized = false;
 
-        // Called on server and client
-        // Useful for registering block/entity classes on both sides
         public override void Start(ICoreAPI api)
         {
             Api = api;
@@ -45,18 +45,26 @@ namespace Meltcaster
         public void ReloadConfig(ICoreAPI api)
         {
             (_fileWatcher ??= new FileWatcher(this)).Queued = true;
-
-            var _config = api.LoadModConfig<MeltcasterConfig>("meltcaster.json");
-            if (_config == null)
+            try
             {
-                api.Logger.Warning("[Meltcaster] Missing config! Using default.");
-                Config = api.Assets.Get(new AssetLocation("meltcaster:config/default.json")).ToObject<MeltcasterConfig>();
-                api.StoreModConfig(Config, "meltcaster.json");
+                var _config = api.LoadModConfig<MeltcasterConfig>("meltcaster.json");
+                if (_config == null)
+                {
+                    Mod.Logger.Warning("[Meltcaster] Missing config! Using default.");
+                    Config = api.Assets.Get(new AssetLocation("meltcaster:config/default.json")).ToObject<MeltcasterConfig>();
+                    api.StoreModConfig(Config, "meltcaster.json");
+                }
+                else
+                {
+                    Config = _config;
+                    Mod.Logger.Notification($"[Meltcaster] Loaded {Config.MeltcastRecipes?.Count ?? 0} meltcasting recipes.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Config = _config;
-                api.Logger.Notification($"[Meltcaster] Loaded {Config.MeltcastRecipes?.Count ?? 0} meltcasting recipes.");
+                Mod.Logger.Error("[Meltcaster] Could not load mod config! Trying to generate from scratch instead.");
+                Mod.Logger.Error(ex);
+                Config = MeltcasterConfig.GetDefault();
             }
             
             if (assetsFinalized) Config?.ResolveAll(api.World);

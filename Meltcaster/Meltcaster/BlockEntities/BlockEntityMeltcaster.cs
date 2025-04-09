@@ -572,6 +572,12 @@ namespace Meltcaster.BlockEntities
             {
                 if (api.World.Rand.NextDouble() >= output.Chance) continue;
 
+                if (output is null)
+                {
+                    api.Logger.Error("[Meltcaster] Output is null. This should not happen. Did one of your recipes fail to resolve?");
+                    continue;
+                }
+
                 ItemStack? stackToAdd;
                 if (output.IsGroup)
                 {
@@ -581,7 +587,7 @@ namespace Meltcaster.BlockEntities
                         itemsRemainingForGroup = output.GroupRollInterval ?? 16;
                     }
 
-                    stackToAdd = selectedOutput?.ResolvedItemstack.Clone();
+                    stackToAdd = selectedOutput?.ResolvedItemstack?.Clone();
                 }
                 else
                 {

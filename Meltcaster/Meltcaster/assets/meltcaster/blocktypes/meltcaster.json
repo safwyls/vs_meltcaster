@@ -3,7 +3,7 @@
   "class": "meltcaster.blockmeltcaster",
   "entityclass": "meltcaster.blockentitymeltcaster",
   "entityBehaviors": [ { "name": "Animatable" } ],
-  "creativeinventory": { "general": [ "*-extinct" ], "meltcaster": [ "*-extinct", "*-temporal" ] },
+  "creativeinventory": { "general": [ "*-extinct" ], "meltcaster": [ "*-extinct"] },
   "variantgroups": [
     {
       "code": "material",
@@ -17,7 +17,7 @@
         "corroded"
       ]
     },
-    { "code": "burnstate", "states": [ "extinct", "lit", "cold", "temporal" ] }
+    { "code": "burnstate", "states": [ "extinct", "lit", "cold" ] }
   ],
   "storageFlags": 1,
   "drawtype": "JSON",
@@ -43,37 +43,13 @@
     "storageType": { "normal": 189 }
   },
   "attributesByType": {
-    "*-copper-cold": { "speedModifier": 1 },
-    "*-tinbronze-cold": { "speedModifier": 1.2 },
-    "*-bismuthbronze-cold": { "speedModifier": 1.2 },
-    "*-blackbronze-cold": { "speedModifier": 1.2 },
-    "*-iron-cold": { "speedModifier": 1.5 },
-    "*-steel-cold": { "speedModifier": 2 },
-    "*-corroded-cold": { "speedModifier": 1.5 },
-
-    "*-copper-lit": { "speedModifier": 1 },
-    "*-tinbronze-lit": { "speedModifier": 1.2 },
-    "*-bismuthbronze-lit": { "speedModifier": 1.2 },
-    "*-blackbronze-lit": { "speedModifier": 1.2 },
-    "*-iron-lit": { "speedModifier": 1.5 },
-    "*-steel-lit": { "speedModifier": 2 },
-    "*-corroded-lit": { "speedModifier": 1.5 },
-
-    "*-copper-extinct": { "speedModifier": 1 },
-    "*-tinbronze-extinct": { "speedModifier": 1.2 },
-    "*-bismuthbronze-extinct": { "speedModifier": 1.2 },
-    "*-blackbronze-extinct": { "speedModifier": 1.2 },
-    "*-iron-extinct": { "speedModifier": 1.5 },
-    "*-steel-extinct": { "speedModifier": 2 },
-    "*-corroded-extinct": { "speedModifier": 1.5 },
-
-    "*-copper-temporal": { "speedModifier": 1, "isTemporal": true },
-    "*-tinbronze-temporal": { "speedModifier": 1.2, "isTemporal": true },
-    "*-bismuthbronze-temporal": { "speedModifier": 1.2, "isTemporal": true },
-    "*-blackbronze-temporal": { "speedModifier": 1.2, "isTemporal": true },
-    "*-iron-temporal": { "speedModifier": 1.5, "isTemporal": true },
-    "*-steel-temporal": { "speedModifier": 2, "isTemporal": true },
-    "*-corroded-temporal": { "speedModifier": 1.5, "isTemporal": true }
+    "*-copper-*": { "speedModifier": 1 },
+    "*-tinbronze-*": { "speedModifier": 1.2 },
+    "*-bismuthbronze-*": { "speedModifier": 1.2 },
+    "*-blackbronze-*": { "speedModifier": 1.2 },
+    "*-iron-*": { "speedModifier": 1.5 },
+    "*-steel-*": { "speedModifier": 2 },
+    "*-corroded-*": { "speedModifier": 2 }
   },
   "sounds": {
     "place": "game:block/plate",
@@ -155,8 +131,7 @@
   "shapebytype": {
     "*-lit": { "base": "block/meltcaster" },
     "*-cold": { "base": "block/meltcaster-unlit" },
-    "*-extinct": { "base": "block/meltcaster-unlit" },
-    "*-temporal": { "base": "block/meltcaster-temporal" }
+    "*-extinct": { "base": "block/meltcaster-unlit" }
   },
   "particlePropertiesByType": {
     "meltcaster-*-lit": [
