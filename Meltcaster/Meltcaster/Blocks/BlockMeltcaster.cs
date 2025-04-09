@@ -181,11 +181,9 @@ namespace Meltcaster.Blocks
 
         public MeltcastRecipe? GetMeltcastProps(ItemStack inputStack)
         {
-            if (inputStack?.Collectible == null || Config?.MeltcastRecipes == null) return null;
+            if (inputStack?.Collectible == null || Config?.MeltcastRecipes == null) return null;            
 
-            string inputCode = inputStack.Collectible.Code.ToString();
-
-            return Config.MeltcastRecipeByCode?.TryGetValue(inputStack.Collectible.Code.ToString());
+            return Config.MeltcastRecipeByCode?.TryGetValue(inputStack.Collectible.Code);
         }
 
         public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel)

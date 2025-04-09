@@ -1,12 +1,10 @@
 ﻿using Meltcaster.Config;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
-using Vintagestory.GameContent;
 
 namespace Meltcaster.Inventory
 {
@@ -107,7 +105,7 @@ namespace Meltcaster.Inventory
             }
 
             // Prefer input slot for meltable items
-            if (Config?.MeltcastRecipeByCode?.TryGetValue(stack.Collectible.Code.ToString()) is MeltcastRecipe recipe)
+            if (Config?.MeltcastRecipeByCode?.TryGetValue(stack.Collectible.Code) is MeltcastRecipe recipe)
             {
                 var inputSlot = slots[1];
                 if (!skipSlots.Contains(inputSlot) && inputSlot.CanHold(sourceSlot) && inputSlot.CanTakeFrom(sourceSlot))

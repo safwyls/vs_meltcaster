@@ -2,7 +2,6 @@
 using Meltcaster.Config;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
@@ -17,8 +16,6 @@ namespace Meltcaster.BlockEntities
     internal class BlockEntityMeltcaster : BlockEntityOpenableContainer
     {
         private MeltcasterConfig? Config => MeltcasterModSystem.Config;
-
-        private string? currentInputCode = null;
         private MeltcastOutput? selectedOutput = null;
         private int itemsRemainingForGroup = 0;
 
@@ -61,12 +58,110 @@ namespace Meltcaster.BlockEntities
         bool shouldRedraw;
 
         public bool IsHot => IsBurning;
+        public bool IsSmoldering => canIgniteFuel;
+        
         public float emptyFirepitBurnTimeMulBonus = 4f;
 
         private BlockEntityAnimationUtil animUtil
         {
             get { return GetBehavior<BEBehaviorAnimatable>()?.animUtil; }
         }
+
+        #region Helper getters
+        public float GetTemp(ItemStack stack)
+        {
+            if (stack == null) return EnviromentTemperature();
+
+            return stack.Collectible.GetTemperature(Api.World, stack);
+        }
+
+        void SetTemp(ItemStack stack, float value)
+        {
+            if (stack == null) return;
+            stack.Collectible.SetTemperature(Api.World, stack, value);
+        }
+
+        public bool IsBurning
+        {
+            get { return fuelBurnTime > 0; }
+        }
+
+        public float InputStackTemp
+        {
+            get
+            {
+                return GetTemp(inputStack);
+            }
+            set
+            {
+                SetTemp(inputStack, value);
+            }
+        }
+
+        public ItemSlot fuelSlot
+        {
+            get { return inventory[0]; }
+        }
+
+        public ItemSlot inputSlot
+        {
+            get { return inventory[1]; }
+        }
+
+        public ItemSlot[] outputSlots
+        {
+            get { return inventory.OutputSlots; }
+        }
+
+        public ItemStack fuelStack
+        {
+            get { return inventory[0].Itemstack; }
+            set { inventory[0].Itemstack = value; inventory[0].MarkDirty(); }
+        }
+
+        public ItemStack inputStack
+        {
+            get { return inventory[1].Itemstack; }
+            set { inventory[1].Itemstack = value; inventory[1].MarkDirty(); }
+        }
+
+        public ItemStack outputStackOne
+        {
+            get { return inventory[2].Itemstack; }
+            set { inventory[2].Itemstack = value; inventory[2].MarkDirty(); }
+        }
+
+        public ItemStack outputStackTwo
+        {
+            get { return inventory[3].Itemstack; }
+            set { inventory[3].Itemstack = value; inventory[3].MarkDirty(); }
+        }
+
+        public ItemStack outputStackThree
+        {
+            get { return inventory[4].Itemstack; }
+            set { inventory[4].Itemstack = value; inventory[4].MarkDirty(); }
+        }
+
+        public ItemStack outputStackFour
+        {
+            get { return inventory[5].Itemstack; }
+            set { inventory[5].Itemstack = value; inventory[5].MarkDirty(); }
+        }
+
+        public CombustibleProperties fuelCombustibleOpts
+        {
+            get { return getCombustibleOpts(0); }
+        }
+
+        public CombustibleProperties getCombustibleOpts(int slotid)
+        {
+            ItemSlot slot = inventory[slotid];
+            if (slot.Itemstack == null) return null;
+            return slot.Itemstack.Collectible.CombustibleProps;
+        }
+
+        #endregion
 
         #region Config
 
@@ -86,13 +181,13 @@ namespace Meltcaster.BlockEntities
         }
 
         // Resting temperature
-        public virtual int enviromentTemperature()
+        public virtual int EnviromentTemperature()
         {
             return 20;
         }
 
         // seconds it requires to melt the ore once beyond melting point
-        public virtual float maxCookingTime()
+        public virtual float MaxCookingTime()
         {
             var MeltcastProps = GetMeltcastProps(inputSlot.Itemstack);
             return (inputSlot.Itemstack == null || MeltcastProps == null) ? 30f : MeltcastProps.MeltcastTime / SpeedModifier;
@@ -115,6 +210,7 @@ namespace Meltcaster.BlockEntities
 
         #endregion
 
+        #region Initialization
         public BlockEntityMeltcaster()
         {
             inventory = new InventoryMeltcasting(null, null);
@@ -138,32 +234,12 @@ namespace Meltcaster.BlockEntities
             {
                 animUtil.InitializeAnimator("Meltcaster:Meltcaster");
             }
-
-            Api.Logger.Debug($"[Meltcaster] Speed modifier for {Block.Code}: {SpeedModifier}");
         }
+        #endregion
 
-        private void OnSlotModified(int slotid)
-        {
-            Block = Api.World.BlockAccessor.GetBlock(Pos);
-
-            MarkDirty(Api.Side == EnumAppSide.Server); // Save useless triple-remesh by only letting the server decide when to redraw
-            shouldRedraw = true;
-
-            if (Api is ICoreClientAPI && clientDialog != null)
-            {
-                SetDialogValues(clientDialog.Attributes);
-            }
-
-            Api.World.BlockAccessor.GetChunkAtBlockPos(Pos)?.MarkModified();
-        }
-
+        #region Animations
         protected virtual void OnInvOpened(IPlayer player)
         {
-            //if (Api.Side == EnumAppSide.Client)
-            //{
-            //    OpenDoor();
-            //}
-
             OpenDoor();
         }
 
@@ -202,13 +278,7 @@ namespace Meltcaster.BlockEntities
                 });
             }
         }
-
-        public bool IsSmoldering => canIgniteFuel;
-
-        public bool IsBurning
-        {
-            get { return fuelBurnTime > 0; }
-        }
+        #endregion
 
         // Sync to client every 500ms
         private void On500msTick(float dt)
@@ -224,10 +294,7 @@ namespace Meltcaster.BlockEntities
         private void OnBurnTick(float dt)
         {
             // Only tick on the server and merely sync to client
-            if (Api is ICoreClientAPI)
-            {
-                return;
-            }
+            if (Api is ICoreClientAPI) return;
 
             // Use up fuel
             if (fuelBurnTime > 0)
@@ -273,7 +340,7 @@ namespace Meltcaster.BlockEntities
             TryHeatAllOutputs(dt);
 
             // Finished smelting? Turn to smelted item
-            if (CanMeltcastInput() && inputStackCookingTime > maxCookingTime())
+            if (CanMeltcastInput() && inputStackCookingTime > MaxCookingTime())
             {
                 MeltcastItems();
             }
@@ -287,8 +354,8 @@ namespace Meltcaster.BlockEntities
             // Furnace is not burning: Cool down furnace and ore also turn of fire
             if (!IsBurning)
             {
-                furnaceTemperature = ChangeTemperature(furnaceTemperature, enviromentTemperature(), dt);
-            }
+                furnaceTemperature = ChangeTemperature(furnaceTemperature, EnviromentTemperature(), dt);
+            }                       
         }
 
         public EnumIgniteState GetIgnitableState(float secondsIgniting)
@@ -377,7 +444,7 @@ namespace Meltcaster.BlockEntities
 
             foreach(var stack in outputStacks)
             {
-                if (canHeatOutput(stack))
+                if (CanHeatOutput(stack))
                 {
                     float oldTemp = GetTemp(stack);
 
@@ -416,32 +483,7 @@ namespace Meltcaster.BlockEntities
 
             MarkDirty(true);
         }
-
-        public float InputStackTemp
-        {
-            get
-            {
-                return GetTemp(inputStack);
-            }
-            set
-            {
-                SetTemp(inputStack, value);
-            }
-        }
-
-        float GetTemp(ItemStack stack)
-        {
-            if (stack == null) return enviromentTemperature();
-
-            return stack.Collectible.GetTemperature(Api.World, stack);
-        }
-
-        void SetTemp(ItemStack stack, float value)
-        {
-            if (stack == null) return;
-            stack.Collectible.SetTemperature(Api.World, stack, value);
-        }
-
+        
         public void IgniteFuel()
         {
             IgniteWithFuel(fuelStack);
@@ -487,7 +529,7 @@ namespace Meltcaster.BlockEntities
         public void MeltcastItems()
         {
             DoMeltcast(Api.World, inputSlot, outputSlots);
-            InputStackTemp = enviromentTemperature();
+            InputStackTemp = EnviromentTemperature();
             inputStackCookingTime = 0;
             MarkDirty(true);
             inputSlot.MarkDirty();
@@ -502,12 +544,12 @@ namespace Meltcaster.BlockEntities
         {
             if (inputStack?.Collectible is null || Config?.MeltcastRecipeByCode is null) return null;
 
-            string inputCode = inputStack.Collectible.Code.ToString();
+            AssetLocation inputCode = inputStack.Collectible.Code;
             
             return Config.MeltcastRecipeByCode?.TryGetValue(inputCode);
         }
         
-        public bool canHeatOutput(ItemStack outputStack)
+        public bool CanHeatOutput(ItemStack outputStack)
         {
             return outputStack?.Collectible.CombustibleProps != null;
         }
@@ -530,8 +572,7 @@ namespace Meltcaster.BlockEntities
             {
                 if (api.World.Rand.NextDouble() >= output.Chance) continue;
 
-                ItemStack? stackToAdd = null;
-
+                ItemStack? stackToAdd;
                 if (output.IsGroup)
                 {
                     if (selectedOutput == null || itemsRemainingForGroup <= 0)
@@ -540,11 +581,11 @@ namespace Meltcaster.BlockEntities
                         itemsRemainingForGroup = output.GroupRollInterval ?? 16;
                     }
 
-                    stackToAdd = selectedOutput?.ResolvedStack?.Clone();
+                    stackToAdd = selectedOutput?.ResolvedItemstack.Clone();
                 }
                 else
                 {
-                    stackToAdd = output.ResolvedStack?.Clone();
+                    stackToAdd = output.ResolvedItemstack.Clone();
                 }
 
                 if (stackToAdd == null) continue;
@@ -599,12 +640,12 @@ namespace Meltcaster.BlockEntities
                                 break;
                             }
                         }
+                    }
 
-                        if (!placed)
-                        {
-                            // If none of the output slots can accept the item, drop it instead
-                            world.SpawnItemEntity(stackToAdd, this.Pos.ToVec3d().Add(new Vec3d(0.5, -0.2, 0.5)));
-                        }
+                    if (!placed)
+                    {
+                        // If none of the output slots can accept the item, drop it instead
+                        world.SpawnItemEntity(stackToAdd, this.Pos.ToVec3d().Add(new Vec3d(0.5, -0.2, 0.5)));
                     }
                 }
             }
@@ -618,6 +659,20 @@ namespace Meltcaster.BlockEntities
         }
 
         #region Events
+        private void OnSlotModified(int slotid)
+        {
+            Block = Api.World.BlockAccessor.GetBlock(Pos);
+
+            MarkDirty(Api.Side == EnumAppSide.Server); // Save useless triple-remesh by only letting the server decide when to redraw
+            shouldRedraw = true;
+
+            if (Api is ICoreClientAPI && clientDialog != null)
+            {
+                SetDialogValues(clientDialog.Attributes);
+            }
+
+            Api.World.BlockAccessor.GetChunkAtBlockPos(Pos)?.MarkModified();
+        }
 
         public override bool OnPlayerRightClick(IPlayer byPlayer, BlockSelection blockSel)
         {
@@ -686,7 +741,6 @@ namespace Meltcaster.BlockEntities
         void SetDialogValues(ITreeAttribute dialogTree)
         {
             dialogTree.SetFloat("furnaceTemperature", furnaceTemperature);
-
             dialogTree.SetInt("maxTemperature", maxTemperature);
             dialogTree.SetFloat("oreCookingTime", inputStackCookingTime);
             dialogTree.SetFloat("maxFuelBurnTime", maxFuelBurnTime);
@@ -702,7 +756,7 @@ namespace Meltcaster.BlockEntities
                     return;
                 }
 
-                MeltcastRecipe? recipe = Config?.MeltcastRecipeByCode?.TryGetValue(inputStack.Collectible.Code.ToString());
+                MeltcastRecipe? recipe = Config?.MeltcastRecipeByCode?.TryGetValue(inputStack.Collectible.Code);
                 
                 if (recipe != null)
                 {
@@ -752,73 +806,6 @@ namespace Meltcaster.BlockEntities
                 clientDialog?.Dispose();
                 clientDialog = null;
             }
-        }
-
-        #endregion
-
-        #region Helper getters
-
-        public ItemSlot fuelSlot
-        {
-            get { return inventory[0]; }
-        }
-
-        public ItemSlot inputSlot
-        {
-            get { return inventory[1]; }
-        }
-
-        public ItemSlot[] outputSlots
-        {
-            get { return inventory.OutputSlots; }
-        }
-
-        public ItemStack fuelStack
-        {
-            get { return inventory[0].Itemstack; }
-            set { inventory[0].Itemstack = value; inventory[0].MarkDirty(); }
-        }
-
-        public ItemStack inputStack
-        {
-            get { return inventory[1].Itemstack; }
-            set { inventory[1].Itemstack = value; inventory[1].MarkDirty(); }
-        }
-
-        public ItemStack outputStackOne
-        {
-            get { return inventory[2].Itemstack; }
-            set { inventory[2].Itemstack = value; inventory[2].MarkDirty(); }
-        }
-
-        public ItemStack outputStackTwo
-        {
-            get { return inventory[3].Itemstack; }
-            set { inventory[3].Itemstack = value; inventory[3].MarkDirty(); }
-        }
-
-        public ItemStack outputStackThree
-        {
-            get { return inventory[4].Itemstack; }
-            set { inventory[4].Itemstack = value; inventory[4].MarkDirty(); }
-        }
-
-        public ItemStack outputStackFour
-        {
-            get { return inventory[5].Itemstack; }
-            set { inventory[5].Itemstack = value; inventory[5].MarkDirty(); }
-        }
-
-        public CombustibleProperties fuelCombustibleOpts
-        {
-            get { return getCombustibleOpts(0); }
-        }
-
-        public CombustibleProperties getCombustibleOpts(int slotid)
-        {
-            ItemSlot slot = inventory[slotid];
-            if (slot.Itemstack == null) return null;
-            return slot.Itemstack.Collectible.CombustibleProps;
         }
 
         #endregion

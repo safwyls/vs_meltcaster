@@ -39,7 +39,7 @@ namespace Meltcaster
             api.Logger.Debug("[Meltcaster] Assets finalized. Loading config...");
             
             // Wait til all assets are loaded to resolve recipes in config
-            Config?.ResolveAll(api);
+            Config?.ResolveAll(api.World);
         }
 
         public void ReloadConfig(ICoreAPI api)
@@ -50,8 +50,8 @@ namespace Meltcaster
             if (_config == null)
             {
                 api.Logger.Warning("[Meltcaster] Missing config! Using default.");
-                Config = MeltcasterConfig.GetDefault();
-                api.StoreModConfig<MeltcasterConfig>(Config, "meltcaster.json");
+                Config = api.Assets.Get(new AssetLocation("meltcaster:config/default.json")).ToObject<MeltcasterConfig>();
+                api.StoreModConfig(Config, "meltcaster.json");
             }
             else
             {
@@ -59,7 +59,7 @@ namespace Meltcaster
                 api.Logger.Notification($"[Meltcaster] Loaded {Config.MeltcastRecipes?.Count ?? 0} meltcasting recipes.");
             }
             
-            if (assetsFinalized) Config?.ResolveAll(api);
+            if (assetsFinalized) Config?.ResolveAll(api.World);
 
             Api.Event.RegisterCallback(_ => _fileWatcher.Queued = false, 100);
         }

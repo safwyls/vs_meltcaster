@@ -1,0 +1,37 @@
+{
+  "code": "meltcaster:gear-depleted",
+  "creativeinventory": { "general": [ "*" ], "meltcaster": [ "*" ] },
+  "shape": { "base": "item/gear-depleted" },
+  "textures": {
+    "depleted": { "base": "item/resource/gear-depleted" }
+  },
+	behaviors: [
+		{ name: "GroundStorable", properties: { layout: 'SingleCenter', collisionBox: { x1: 0.35, y1: 0.35, z1: 0.35, x2: 0.65, y2: 0.1, z2: 0.65 } } }
+	],
+	maxStackSize: 64,
+	materialDensity: 4000,
+	glowLevel: 25,
+	guiTransform: {
+		translation: { x: 3, y: 1, z: 0 },
+		rotation: { x: 145, y: -12, z: 0 },
+		origin: { x: 0.5, y: 0.0625, z: 0.5 },
+		scale: 2.5
+	},
+	fpHandTransform: {
+		translation: { x: 0, y: 0.2, z: 0 },
+		rotation: { x: 15, y: 0, z: 0 },
+		origin: { x: 0.5, y: 0, z: 0.5 },
+		scale: 1.8
+	},
+	tpHandTransform: {
+			translation: { x: -0.95, y: -0.11, z: -0.85 },
+			rotation: { x: 0, y: -89, z: 5 },
+			origin: { x: 0.5, y: 0.0625, z: 0.5 },
+			scale: 0.61
+	},
+	groundTransform: {
+		translation: { x: 0, y: 0, z: 0 },
+		rotation: { x: 0, y: 0, z: 0 },
+		origin: { x: 0.39, y: 0, z: 0.47 },
+		scale: 3.76
+	}

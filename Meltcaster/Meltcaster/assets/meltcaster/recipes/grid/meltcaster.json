@@ -28,7 +28,7 @@
       },
       "output": {
         "type": "block",
-        "code": "meltcaster-copper-extinct-east"
+        "code": "meltcaster-copper-extinct"
       }
     },
   {
@@ -60,7 +60,7 @@
     },
     "output": {
       "type": "block",
-      "code": "meltcaster-tinbronze-extinct-east"
+      "code": "meltcaster-tinbronze-extinct"
     }
   },
   {
@@ -92,7 +92,7 @@
     },
     "output": {
       "type": "block",
-      "code": "meltcaster-bismuthbronze-extinct-east"
+      "code": "meltcaster-bismuthbronze-extinct"
     }
   },
   {
@@ -124,7 +124,7 @@
     },
     "output": {
       "type": "block",
-      "code": "meltcaster-blackbronze-extinct-east"
+      "code": "meltcaster-blackbronze-extinct"
     }
   },
   {
@@ -151,7 +151,7 @@
     },
     "output": {
       "type": "block",
-      "code": "meltcaster-iron-extinct-east"
+      "code": "meltcaster-iron-extinct"
     }
   },
   {
@@ -183,7 +183,7 @@
     },
     "output": {
       "type": "block",
-      "code": "meltcaster-steel-extinct-east"
+      "code": "meltcaster-steel-extinct"
     }
   },
   {
@@ -195,13 +195,13 @@
     "ingredients": {
       "M": {
         "type": "block",
-        "code": "meltcaster:meltcaster-corroded-extinct-east",
+        "code": "meltcaster:meltcaster-corroded-extinct",
         "quantity": "1"
       }
     },
     "output": {
       "type": "block",
-      "code": "meltcaster-iron-extinct-east"
+      "code": "meltcaster-iron-extinct"
     }
   },
   {
@@ -213,13 +213,61 @@
     "ingredients": {
       "M": {
         "type": "block",
-        "code": "meltcaster:meltcaster-iron-extinct-east",
+        "code": "meltcaster:meltcaster-iron-extinct",
         "quantity": "1"
       }
     },
     "output": {
       "type": "block",
-      "code": "meltcaster-corroded-extinct-east"
+      "code": "meltcaster-corroded-extinct"
+    }
+  },
+  {
+    "ingredientPattern": "_M_,DTV,CAP",
+    "width": 3,
+    "height": 3,
+    "recipeGroup": 1,
+    "ingredients": {
+      "M": {
+        "type": "block",
+        "code": "meltcaster:meltcaster-*-extinct",
+        "name": "material",
+        "quantity": 1
+      },
+      "D": {
+        "type": "item",
+        "code":  "game:jonasparts-cylinder01",
+        "quantity": 4
+      },
+      "T": {
+        "type": "item",
+        "code": "game:gear-temporal",
+        "quantity": 1
+      },
+      "V": {
+        "type": "item",
+        "code":  "game:jonasparts-tank01",
+        "quantity": 1
+      },
+      "C": {
+        "type": "item",
+        "code":  "game:jonasparts-connector01",
+        "quantity": 1
+      },
+      "A": {
+        "type": "item",
+        "code":  "game:jonasparts-cylinder02",
+        "quantity": 1
+      },
+      "P": {
+        "type": "block",
+        "code":  "game:metal-parts",
+        "quantity": 3
+      }
+    },
+    "output": {
+      "type": "block",
+      "code": "meltcaster-{material}-temporal"
     }
   }
 ]

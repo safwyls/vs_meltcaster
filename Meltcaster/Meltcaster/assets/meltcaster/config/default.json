@@ -1,0 +1,288 @@
+{
+  "MeltcastRecipes": [
+    {
+      "Input": { "Code": "game:metal-scraps", "Type": 0, "StackSize": 1 },
+      "MeltcastTemp": 1200.0,
+      "MeltcastTime": 60.0,
+      "Output": [
+        { "Code": "meltcaster:g-metal-bits", "StackSize": 1, "Chance": 1.0,
+          "Group": [
+            { "Code": "game:metalbit-copper", "Type": 1, "StackSize": 1, "Chance": 1.0 },
+            { "Code": "game:metalbit-tinbronze", "Type": 1, "StackSize": 1, "Chance": 0.7 },
+            { "Code": "game:metalbit-bismuthbronze", "Type": 1, "StackSize": 1, "Chance": 0.6 },
+            { "Code": "game:metalbit-blackbronze", "Type": 1, "StackSize": 1, "Chance": 0.5 },
+            { "Code": "game:metalbit-iron", "Type": 1, "StackSize": 1, "Chance": 0.5 },
+            { "Code": "game:metalbit-steel", "Type": 1, "StackSize": 1, "Chance": 0.4 },
+            { "Code": "game:metalbit-nickel", "Type": 1, "StackSize": 1, "Chance": 0.3 },
+            { "Code": "game:metalbit-lead", "Type": 1, "StackSize": 1, "Chance": 0.3 },
+            { "Code": "game:metalbit-zinc", "Type": 1, "StackSize": 1, "Chance": 0.3 },
+            { "Code": "game:metalbit-bismuth", "Type": 1, "StackSize": 1, "Chance": 0.3 },
+            { "Code": "game:metalbit-molybdochalkos", "Type": 1, "StackSize": 1, "Chance": 0.3 },
+            { "Code": "game:metalbit-cupronickel", "Type": 1, "StackSize": 1, "Chance": 0.2 },
+            { "Code": "game:metalbit-brass", "Type": 1, "StackSize": 1, "Chance": 0.2 },
+            { "Code": "game:metalbit-chromium", "Type": 1, "StackSize": 1, "Chance": 0.2 },
+            { "Code": "game:metalbit-silver", "Type": 1, "StackSize": 1, "Chance": 0.2 },
+            { "Code": "game:metalbit-leadsolder", "Type": 1, "StackSize": 1, "Chance": 0.2 },
+            { "Code": "game:metalbit-silversolder", "Type": 1, "StackSize": 1, "Chance": 0.1 },
+            { "Code": "game:metalbit-meteoriciron", "Type": 1, "StackSize": 1, "Chance": 0.1 },
+            { "Code": "game:metalbit-gold", "Type": 1, "StackSize": 1, "Chance": 0.1 },
+            { "Code": "game:metalbit-electrum", "Type": 1, "StackSize": 1, "Chance": 0.05 },
+            { "Code": "game:metalbit-titanium", "Type": 1, "StackSize": 1, "Chance": 0.05 }
+          ]
+        },
+        { "Code": "game:gear-rusty", "Type": 1, "StackSize": 1, "Chance": 0.05 },
+        { "Code": "game:gear-temporal", "Type": 1, "StackSize": 1, "Chance": 0.01 }
+      ]
+    },
+    {
+      "Input": { "Code": "game:metal-parts", "Type": 0, "StackSize": 1 },
+      "MeltcastTemp": 1200.0,
+      "MeltcastTime": 60.0,
+      "Output": [
+        { "Code": "meltcaster:g-jonas-metal-bits", "StackSize": 1, "Chance": 1.0,
+          "Group": [
+            { "ItemCode": "game:metalbit-cupronickel", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalbit-iron", "Type": 1, "Quantity": 1, "Chance": 0.7 },
+            { "ItemCode": "game:metalbit-steel", "Type": 1, "Quantity": 1, "Chance": 0.5 }
+          ]
+        },
+        { "Code": "game:gear-rusty", "Type": 1, "StackSize": 1, "Chance": 0.01 },
+        { "Code": "game:gear-temporal", "Type": 1, "StackSize": 1, "Chance": 0.02 }
+      ]
+    },
+    {
+      "Input": { "Code": "game:jonasframes-gearbox01", "Type": 1, "StackSize": 1 },
+      "MeltcastTemp": 1200.0,
+      "MeltcastTime": 60.0,
+      "Output": [
+        { "Code": "game:metal-parts", "Type": 0, "StackSize": 1, "Chance": 1.0 },
+        { "Code": "game:rod-cupronickel", "Type": 1, "StackSize": 1, "Chance": 0.7 },
+        { "Code": "meltcaster:g-jonas-nails-and-strips", "StackSize": 1, "Chance": 0.5,
+          "Group": [
+            { "ItemCode": "game:metalnailsandstrips-cupronickel", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-iron", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-steel", "Type": 1, "Quantity": 1, "Chance": 1.0 }
+          ]
+        },
+        { "Code": "game:gear-temporal", "Type": 1, "StackSize": 1, "Chance": 0.3 },
+        { "Code": "betterruins:br-schematic-jonasassembly", "Type": 1, "StackSize": 1, "Chance": 0.1 }
+      ]
+    },
+    {
+      "Input": { "Code": "game:jonasframes-gearbox02", "Type": 1, "StackSize": 1 },
+      "MeltcastTemp": 1200.0,
+      "MeltcastTime": 60.0,
+      "Output": [
+        { "Code": "game:metal-parts", "Type": 0, "StackSize": 1, "Chance": 1.0 },
+        { "Code": "game:rod-cupronickel", "Type": 1, "StackSize": 1, "Chance": 0.7 },
+        { "Code": "meltcaster:g-jonas-nails-and-strips", "StackSize": 1, "Chance": 0.5,
+          "Group": [
+            { "ItemCode": "game:metalnailsandstrips-cupronickel", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-iron", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-steel", "Type": 1, "Quantity": 1, "Chance": 1.0 }
+          ]
+        },
+        { "Code": "game:gear-temporal", "Type": 1, "StackSize": 1, "Chance": 0.3 },
+        { "Code": "betterruins:br-schematic-jonasassembly", "Type": 1, "StackSize": 1, "Chance": 0.1 }
+      ]
+    },
+    {
+      "Input": { "Code": "game:jonasframes-oscillator01", "Type": 1, "StackSize": 1 },
+      "MeltcastTemp": 1200.0,
+      "MeltcastTime": 60.0,
+      "Output": [
+        { "Code": "game:metal-parts", "Type": 0, "StackSize": 1, "Chance": 1.0 },
+        { "Code": "game:rod-cupronickel", "Type": 1, "StackSize": 1, "Chance": 0.7 },
+        { "Code": "meltcaster:g-jonas-nails-and-strips", "StackSize": 1, "Chance": 0.5,
+          "Group": [
+            { "ItemCode": "game:metalnailsandstrips-cupronickel", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-iron", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-steel", "Type": 1, "Quantity": 1, "Chance": 1.0 }
+          ]
+        },
+        { "Code": "game:gear-temporal", "Type": 1, "StackSize": 1, "Chance": 0.3 },
+        { "Code": "betterruins:br-schematic-jonasassembly", "Type": 1, "StackSize": 1, "Chance": 0.1 }
+      ]
+    },
+    {
+      "Input": { "Code": "game:jonasframes-spring01", "Type": 1, "StackSize": 1 },
+      "MeltcastTemp": 1200.0,
+      "MeltcastTime": 60.0,
+      "Output": [
+        { "Code": "game:metal-parts", "Type": 0, "StackSize": 1, "Chance": 1.0 },
+        { "Code": "game:rod-cupronickel", "Type": 1, "StackSize": 1, "Chance": 0.7 },
+        { "Code": "meltcaster:g-jonas-nails-and-strips", "StackSize": 1, "Chance": 0.5,
+          "Group": [
+            { "ItemCode": "game:metalnailsandstrips-cupronickel", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-iron", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-steel", "Type": 1, "Quantity": 1, "Chance": 1.0 }
+          ]
+        },
+        { "Code": "game:gear-temporal", "Type": 1, "StackSize": 1, "Chance": 0.3 },
+        { "Code": "betterruins:br-schematic-jonasassembly", "Type": 1, "StackSize": 1, "Chance": 0.1 }
+      ]
+    },
+    {
+      "Input": { "Code": "game:jonasframes-joint01", "Type": 1, "StackSize": 1 },
+      "MeltcastTemp": 1200.0,
+      "MeltcastTime": 60.0,
+      "Output": [
+        { "Code": "game:metal-parts", "Type": 0, "StackSize": 1, "Chance": 1.0 },
+        { "Code": "game:rod-cupronickel", "Type": 1, "StackSize": 1, "Chance": 0.7 },
+        { "Code": "meltcaster:g-jonas-nails-and-strips", "StackSize": 1, "Chance": 0.5,
+          "Group": [
+            { "ItemCode": "game:metalnailsandstrips-cupronickel", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-iron", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-steel", "Type": 1, "Quantity": 1, "Chance": 1.0 }
+          ]
+        },
+        { "Code": "game:gear-temporal", "Type": 1, "StackSize": 1, "Chance": 0.3 },
+        { "Code": "betterruins:br-schematic-jonasassembly", "Type": 1, "StackSize": 1, "Chance": 0.1 }
+      ]
+    },
+    {
+      "Input": { "Code": "game:jonasframes-gears01", "Type": 1, "StackSize": 1 },
+      "MeltcastTemp": 1200.0,
+      "MeltcastTime": 60.0,
+      "Output": [
+        { "Code": "game:metal-parts", "Type": 0, "StackSize": 1, "Chance": 1.0 },
+        { "Code": "game:rod-cupronickel", "Type": 1, "StackSize": 1, "Chance": 0.7 },
+        { "Code": "meltcaster:g-jonas-nails-and-strips", "StackSize": 1, "Chance": 0.5,
+          "Group": [
+            { "ItemCode": "game:metalnailsandstrips-cupronickel", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-iron", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-steel", "Type": 1, "Quantity": 1, "Chance": 1.0 }
+          ]
+        },
+        { "Code": "game:gear-temporal", "Type": 1, "StackSize": 1, "Chance": 0.3 },
+        { "Code": "betterruins:br-schematic-jonasassembly", "Type": 1, "StackSize": 1, "Chance": 0.1 }
+      ]
+    },
+    {
+      "Input": { "Code": "game:jonasframes-gears02", "Type": 1, "StackSize": 1 },
+      "MeltcastTemp": 1200.0,
+      "MeltcastTime": 60.0,
+      "Output": [
+        { "Code": "game:metal-parts", "Type": 0, "StackSize": 1, "Chance": 1.0 },
+        { "Code": "game:rod-cupronickel", "Type": 1, "StackSize": 1, "Chance": 0.7 },
+        { "Code": "meltcaster:g-jonas-nails-and-strips", "StackSize": 1, "Chance": 0.5,
+          "Group": [
+            { "ItemCode": "game:metalnailsandstrips-cupronickel", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-iron", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-steel", "Type": 1, "Quantity": 1, "Chance": 1.0 }
+          ]
+        },
+        { "Code": "game:gear-temporal", "Type": 1, "StackSize": 1, "Chance": 0.3 },
+        { "Code": "betterruins:br-schematic-jonasassembly", "Type": 1, "StackSize": 1, "Chance": 0.1 }
+      ]
+    },
+    {
+      "Input": { "Code": "game:jonasparts-connector01", "Type": 1, "StackSize": 1 },
+      "MeltcastTemp": 1200.0,
+      "MeltcastTime": 60.0,
+      "Output": [
+        { "Code": "game:metal-parts", "Type": 0, "StackSize": 1, "Chance": 1.0 },
+        { "Code": "game:rod-cupronickel", "Type": 1, "StackSize": 1, "Chance": 0.7 },
+        { "Code": "meltcaster:g-jonas-nails-and-strips", "StackSize": 1, "Chance": 0.5,
+          "Group": [
+            { "ItemCode": "game:metalnailsandstrips-cupronickel", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-iron", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-steel", "Type": 1, "Quantity": 1, "Chance": 1.0 }
+          ]
+        },
+        { "Code": "game:gear-temporal", "Type": 1, "StackSize": 1, "Chance": 0.3 },
+        { "Code": "betterruins:br-schematic-jonaspart", "Type": 1, "StackSize": 1, "Chance": 0.1 }
+      ]
+    },
+    {
+      "Input": { "Code": "game:jonasparts-cylinder01", "Type": 1, "StackSize": 1 },
+      "MeltcastTemp": 1200.0,
+      "MeltcastTime": 60.0,
+      "Output": [
+        { "Code": "game:metal-parts", "Type": 0, "StackSize": 1, "Chance": 1.0 },
+        { "Code": "game:rod-cupronickel", "Type": 1, "StackSize": 1, "Chance": 0.7 },
+        { "Code": "meltcaster:g-jonas-nails-and-strips", "StackSize": 1, "Chance": 0.5,
+          "Group": [
+            { "ItemCode": "game:metalnailsandstrips-cupronickel", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-iron", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-steel", "Type": 1, "Quantity": 1, "Chance": 1.0 }
+          ]
+        },
+        { "Code": "game:gear-temporal", "Type": 1, "StackSize": 1, "Chance": 0.3 },
+        { "Code": "betterruins:br-schematic-jonaspart", "Type": 1, "StackSize": 1, "Chance": 0.1 }
+      ]
+    },
+    {
+      "Input": { "Code": "game:jonasparts-cylinder02", "Type": 1, "StackSize": 1 },
+      "MeltcastTemp": 1200.0,
+      "MeltcastTime": 60.0,
+      "Output": [
+        { "Code": "game:metal-parts", "Type": 0, "StackSize": 1, "Chance": 1.0 },
+        { "Code": "game:rod-cupronickel", "Type": 1, "StackSize": 1, "Chance": 0.7 },
+        { "Code": "meltcaster:g-jonas-nails-and-strips", "StackSize": 1, "Chance": 0.5,
+          "Group": [
+            { "ItemCode": "game:metalnailsandstrips-cupronickel", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-iron", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-steel", "Type": 1, "Quantity": 1, "Chance": 1.0 }
+          ]
+        },
+        { "Code": "game:gear-temporal", "Type": 1, "StackSize": 1, "Chance": 0.3 },
+        { "Code": "betterruins:br-schematic-jonaspart", "Type": 1, "StackSize": 1, "Chance": 0.1 }
+      ]
+    },
+    {
+      "Input": { "Code": "game:jonasparts-tank01", "Type": 1, "StackSize": 1 },
+      "MeltcastTemp": 1200.0,
+      "MeltcastTime": 60.0,
+      "Output": [
+        { "Code": "game:metal-parts", "Type": 0, "StackSize": 1, "Chance": 1.0 },
+        { "Code": "game:rod-cupronickel", "Type": 1, "StackSize": 1, "Chance": 0.7 },
+        { "Code": "meltcaster:g-jonas-nails-and-strips", "StackSize": 1, "Chance": 0.5,
+          "Group": [
+            { "ItemCode": "game:metalnailsandstrips-cupronickel", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-iron", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-steel", "Type": 1, "Quantity": 1, "Chance": 1.0 }
+          ]
+        },
+        { "Code": "game:gear-temporal", "Type": 1, "StackSize": 1, "Chance": 0.3 },
+        { "Code": "betterruins:br-schematic-jonaspart", "Type": 1, "StackSize": 1, "Chance": 0.1 }
+      ]
+    },
+    {
+      "Input": { "Code": "game:jonasparts-tank02", "Type": 1, "StackSize": 1 },
+      "MeltcastTemp": 1200.0,
+      "MeltcastTime": 60.0,
+      "Output": [
+        { "Code": "game:metal-parts", "Type": 0, "StackSize": 1, "Chance": 1.0 },
+        { "Code": "game:rod-cupronickel", "Type": 1, "StackSize": 1, "Chance": 0.7 },
+        { "Code": "meltcaster:g-jonas-nails-and-strips", "StackSize": 1, "Chance": 0.5,
+          "Group": [
+            { "ItemCode": "game:metalnailsandstrips-cupronickel", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-iron", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-steel", "Type": 1, "Quantity": 1, "Chance": 1.0 }
+          ]
+        },
+        { "Code": "game:gear-temporal", "Type": 1, "StackSize": 1, "Chance": 0.3 },
+        { "Code": "betterruins:br-schematic-jonaspart", "Type": 1, "StackSize": 1, "Chance": 0.1 }
+      ]
+    },
+    {
+      "Input": { "Code": "game:jonasparts-valve01", "Type": 1, "StackSize": 1 },
+      "MeltcastTemp": 1200.0,
+      "MeltcastTime": 60.0,
+      "Output": [
+        { "Code": "game:metal-parts", "Type": 0, "StackSize": 1, "Chance": 1.0 },
+        { "Code": "game:rod-cupronickel", "Type": 1, "StackSize": 1, "Chance": 0.7 },
+        { "Code": "meltcaster:g-jonas-nails-and-strips", "StackSize": 1, "Chance": 0.5,
+          "Group": [
+            { "ItemCode": "game:metalnailsandstrips-cupronickel", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-iron", "Type": 1, "Quantity": 1, "Chance": 1.0 },
+            { "ItemCode": "game:metalnailsandstrips-steel", "Type": 1, "Quantity": 1, "Chance": 1.0 }
+          ]
+        },
+        { "Code": "game:gear-temporal", "Type": 1, "StackSize": 1, "Chance": 0.3 },
+        { "Code": "betterruins:br-schematic-jonaspart", "Type": 1, "StackSize": 1, "Chance": 0.1 }
+      ]
+    }
+  ]
+}

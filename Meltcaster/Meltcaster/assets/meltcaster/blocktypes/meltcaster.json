@@ -3,7 +3,7 @@
   "class": "meltcaster.blockmeltcaster",
   "entityclass": "meltcaster.blockentitymeltcaster",
   "entityBehaviors": [ { "name": "Animatable" } ],
-  "creativeinventory": { "general": [ "*-extinct-east" ], "meltcaster": [ "*-extinct-east" ] },
+  "creativeinventory": { "general": [ "*-extinct" ], "meltcaster": [ "*-extinct", "*-temporal" ] },
   "variantgroups": [
     {
       "code": "material",
@@ -17,8 +17,7 @@
         "corroded"
       ]
     },
-    { "code": "burnstate", "states": [ "extinct", "lit", "cold" ] },
-    { "code": "side", "loadFromProperties": "abstract/horizontalorientation" }
+    { "code": "burnstate", "states": [ "extinct", "lit", "cold", "temporal" ] }
   ],
   "storageFlags": 1,
   "drawtype": "JSON",
@@ -44,20 +43,38 @@
     "storageType": { "normal": 189 }
   },
   "attributesByType": {
-    "*-copper-*": { "speedModifier": 1 },
-    "*-tinbronze-*": { "speedModifier": 1.2 },
-    "*-bismuthbronze-*": { "speedModifier": 1.2 },
-    "*-blackbronze-*": { "speedModifier": 1.2 },
-    "*-iron-*": { "speedModifier": 1.5 },
-    "*-steel-*": { "speedModifier": 2 },
-    "*-corroded-*": { "speedModifier": 1.5 }
+    "*-copper-cold": { "speedModifier": 1 },
+    "*-tinbronze-cold": { "speedModifier": 1.2 },
+    "*-bismuthbronze-cold": { "speedModifier": 1.2 },
+    "*-blackbronze-cold": { "speedModifier": 1.2 },
+    "*-iron-cold": { "speedModifier": 1.5 },
+    "*-steel-cold": { "speedModifier": 2 },
+    "*-corroded-cold": { "speedModifier": 1.5 },
+
+    "*-copper-lit": { "speedModifier": 1 },
+    "*-tinbronze-lit": { "speedModifier": 1.2 },
+    "*-bismuthbronze-lit": { "speedModifier": 1.2 },
+    "*-blackbronze-lit": { "speedModifier": 1.2 },
+    "*-iron-lit": { "speedModifier": 1.5 },
+    "*-steel-lit": { "speedModifier": 2 },
+    "*-corroded-lit": { "speedModifier": 1.5 },
+
+    "*-copper-extinct": { "speedModifier": 1 },
+    "*-tinbronze-extinct": { "speedModifier": 1.2 },
+    "*-bismuthbronze-extinct": { "speedModifier": 1.2 },
+    "*-blackbronze-extinct": { "speedModifier": 1.2 },
+    "*-iron-extinct": { "speedModifier": 1.5 },
+    "*-steel-extinct": { "speedModifier": 2 },
+    "*-corroded-extinct": { "speedModifier": 1.5 },
+
+    "*-copper-temporal": { "speedModifier": 1, "isTemporal": true },
+    "*-tinbronze-temporal": { "speedModifier": 1.2, "isTemporal": true },
+    "*-bismuthbronze-temporal": { "speedModifier": 1.2, "isTemporal": true },
+    "*-blackbronze-temporal": { "speedModifier": 1.2, "isTemporal": true },
+    "*-iron-temporal": { "speedModifier": 1.5, "isTemporal": true },
+    "*-steel-temporal": { "speedModifier": 2, "isTemporal": true },
+    "*-corroded-temporal": { "speedModifier": 1.5, "isTemporal": true }
   },
-  "behaviors": [
-    {
-      "name": "HorizontalOrientable",
-      "properties": { "dropBlockFace": "east" }
-    }
-  ],
   "sounds": {
     "place": "game:block/plate",
     "hit": "game:block/plate",
@@ -70,7 +87,9 @@
       "leaded": { "base": "game:block/glass/leaded" },
       "frame": { "base": "game:block/metal/ingot/copper" },
       "lead": { "base": "game:block/metal/plate/lead" },
-      "mesh5": { "base": "game:block/metal/mesh5" }
+      "mesh5": { "base": "game:block/metal/mesh5" },
+		  "rustyglow": { "base": "game:block/machine/statictranslocator/rustyglow" },
+		  "uranium": { "base": "game:block/metal/ingot/uranium" }
     },
     "*-tinbronze-*": {
       "charcoal": { "base": "game:block/coal/charcoal" },
@@ -78,7 +97,9 @@
       "leaded": { "base": "game:block/glass/leaded" },
       "frame": { "base": "game:block/metal/ingot/tinbronze" },
       "lead": { "base": "game:block/metal/plate/lead" },
-      "mesh5": { "base": "game:block/metal/mesh5" }
+      "mesh5": { "base": "game:block/metal/mesh5" },
+		  "rustyglow": { "base": "game:block/machine/statictranslocator/rustyglow" },
+		  "uranium": { "base": "game:block/metal/ingot/uranium" }
     },
     "*-bismuthbronze-*": {
       "charcoal": { "base": "game:block/coal/charcoal" },
@@ -86,7 +107,9 @@
       "leaded": { "base": "game:block/glass/leaded" },
       "frame": { "base": "game:block/metal/ingot/bismuthbronze" },
       "lead": { "base": "game:block/metal/plate/lead" },
-      "mesh5": { "base": "game:block/metal/mesh5" }
+      "mesh5": { "base": "game:block/metal/mesh5" },
+		  "rustyglow": { "base": "game:block/machine/statictranslocator/rustyglow" },
+		  "uranium": { "base": "game:block/metal/ingot/uranium" }
     },
     "*-blackbronze-*": {
       "charcoal": { "base": "game:block/coal/charcoal" },
@@ -94,7 +117,9 @@
       "leaded": { "base": "game:block/glass/leaded" },
       "frame": { "base": "game:block/metal/ingot/blackbronze" },
       "lead": { "base": "game:block/metal/plate/lead" },
-      "mesh5": { "base": "game:block/metal/mesh5" }
+      "mesh5": { "base": "game:block/metal/mesh5" },
+		  "rustyglow": { "base": "game:block/machine/statictranslocator/rustyglow" },
+		  "uranium": { "base": "game:block/metal/ingot/uranium" }
     },
     "*-iron-*": {
       "charcoal": { "base": "game:block/coal/charcoal" },
@@ -102,7 +127,9 @@
       "leaded": { "base": "game:block/glass/leaded" },
       "frame": { "base": "game:block/metal/ingot/iron" },
       "lead": { "base": "game:block/metal/plate/lead" },
-      "mesh5": { "base": "game:block/metal/mesh5" }
+      "mesh5": { "base": "game:block/metal/mesh5" },
+		  "rustyglow": { "base": "game:block/machine/statictranslocator/rustyglow" },
+		  "uranium": { "base": "game:block/metal/ingot/uranium" }
     },
     "*-steel-*": {
       "charcoal": { "base": "game:block/coal/charcoal" },
@@ -110,7 +137,9 @@
       "leaded": { "base": "game:block/glass/leaded" },
       "frame": { "base": "game:block/metal/ingot/steel" },
       "lead": { "base": "game:block/metal/plate/lead" },
-      "mesh5": { "base": "game:block/metal/mesh5" }
+      "mesh5": { "base": "game:block/metal/mesh5" },
+		  "rustyglow": { "base": "game:block/machine/statictranslocator/rustyglow" },
+		  "uranium": { "base": "game:block/metal/ingot/uranium" }
     },
     "*-corroded-*": {
       "charcoal": { "base": "game:block/coal/charcoal" },
@@ -118,25 +147,19 @@
       "leaded": { "base": "game:block/glass/leaded" },
       "frame": { "base": "game:block/metal/corroded/normal4" },
       "lead": { "base": "game:block/metal/plate/lead" },
-      "mesh5": { "base": "game:block/metal/mesh5" }
+      "mesh5": { "base": "game:block/metal/mesh5" },
+		  "rustyglow": { "base": "game:block/machine/statictranslocator/rustyglow" },
+		  "uranium": { "base": "game:block/metal/ingot/uranium" }
     }
   },
   "shapebytype": {
-    "*-lit-north": { "base": "block/meltcaster", "rotateY": 0 },
-    "*-lit-east": { "base": "block/meltcaster", "rotateY": 270 },
-    "*-lit-south": { "base": "block/meltcaster", "rotateY": 180 },
-    "*-lit-west": { "base": "block/meltcaster", "rotateY": 90 },
-    "*-cold-north": { "base": "block/meltcaster-unlit", "rotateY": 0 },
-    "*-cold-east": { "base": "block/meltcaster-unlit", "rotateY": 270 },
-    "*-cold-south": { "base": "block/meltcaster-unlit", "rotateY": 180 },
-    "*-cold-west": { "base": "block/meltcaster-unlit", "rotateY": 90 },
-    "*-extinct-north": { "base": "block/meltcaster-unlit", "rotateY": 0 },
-    "*-extinct-east": { "base": "block/meltcaster-unlit", "rotateY": 270 },
-    "*-extinct-south": { "base": "block/meltcaster-unlit", "rotateY": 180 },
-    "*-extinct-west": { "base": "block/meltcaster-unlit", "rotateY": 90 }
+    "*-lit": { "base": "block/meltcaster" },
+    "*-cold": { "base": "block/meltcaster-unlit" },
+    "*-extinct": { "base": "block/meltcaster-unlit" },
+    "*-temporal": { "base": "block/meltcaster-temporal" }
   },
   "particlePropertiesByType": {
-    "meltcaster-*-lit-*": [
+    "meltcaster-*-lit": [
       {
         "__comment": "Ember cubicles",
         "hsvaColor": [
@@ -218,6 +241,90 @@
         "particleModel": "Quad",
         "vertexFlags": 128,
         "windAffectednes": 0.5
+      }           
+    ],
+    "meltcaster-*-temporal": [
+      {
+        "__comment": "Glow cubicles",
+        "hsvaColor": [
+          { "avg": 168, "var": 20 },
+          { "avg": 174, "var": 50 },
+          { "avg": 255, "var": 50 },
+          { "avg": 255, "var": 0 }
+        ],
+        "gravityEffect": { "dist": "invexp", "avg": -0.1, "var": 0.4 },
+        "posOffset": [
+          { "avg": 0, "var": 0.2 },
+          { "avg": 0, "var": 0 },
+          { "avg": 0, "var": 0.2 }
+        ],
+        "velocity": [
+          { "avg": 0, "var": 0.15 },
+          { "avg": 0.5, "var": 0.1 },
+          { "avg": 0, "var": 0.15 }
+        ],
+        "quantity": { "avg": 0.015 },
+        "size": { "avg": 0.4, "var": 0 },
+        "sizeEvolve": { "transform": "quadratic", "factor": -0.7 },
+        "lifeLength": { "avg": 1.5 },
+        "vertexFlags": 128,
+        "windAffectednes": 0
+      },
+      {
+        "__comment": "Smoke quads",
+        "hsvaColor": [
+          { "avg": 0, "var": 0 },
+          { "avg": 77, "var": 0 },
+          { "avg": 153, "var": 30 },
+          { "avg": 220, "var": 50 }
+        ],
+        "opacityEvolve": { "transform": "linear", "factor": -255 },
+        "gravityEffect": { "avg": 0, "var": 0 },
+        "posOffset": [
+          { "avg": 0, "var": 0.2 },
+          { "avg": 0, "var": 0 },
+          { "avg": 0, "var": 0.2 }
+        ],
+        "velocity": [
+          { "avg": 0, "var": 0.025 },
+          { "avg": 0.2, "var": 0.05 },
+          { "avg": 0, "var": 0.025 }
+        ],
+        "quantity": { "avg": 0.08 },
+        "size": { "avg": 0.3, "var": 0.05 },
+        "sizeEvolve": { "transform": "linear", "factor": 1.5 },
+        "particleModel": "Quad",
+        "lifeLength": { "avg": 18 },
+        "selfPropelled": true,
+        "windAffectednes": 0.7
+      },
+      {
+        "__comment": "Temporal quads",
+        "hsvaColor": [
+          { "avg": 168, "var": 20 },
+          { "avg": 174, "var": 50 },
+          { "avg": 255, "var": 50 },
+          { "avg": 255, "var": 0 }
+        ],
+        "opacityEvolve": { "transform": "quadratic", "factor": -16 },
+        "gravityEffect": { "avg": 0, "var": 0 },
+        "posOffset": [
+          { "avg": 0, "var": 0.1 },
+          { "avg": 0, "var": 0 },
+          { "avg": 0, "var": 0.1 }
+        ],
+        "velocity": [
+          { "avg": 0, "var": 0.1 },
+          { "avg": 0.125, "var": 0.05 },
+          { "avg": 0, "var": 0.1 }
+        ],
+        "quantity": { "avg": 1 },
+        "size": { "avg": 0.35, "var": 0.05 },
+        "lifeLength": { "avg": 0.25 },
+        "sizeEvolve": { "transform": "linear", "factor": 0.25 },
+        "particleModel": "Quad",
+        "vertexFlags": 128,
+        "windAffectednes": 0.5
       }
     ]
   },
@@ -233,9 +340,6 @@
     "scale": 0.85
   },
   "collisionSelectionBoxesByType": {
-    "*-north": [ { "x1": 0, "x2": 1, "y1": 0, "y2": 1.55, "z1": 0, "z2": 1 } ],
-    "*-east": [ { "x1": 0, "x2": 1, "y1": 0, "y2": 1.55, "z1": 0, "z2": 1 } ],
-    "*-south": [ { "x1": 0, "x2": 1, "y1": 0, "y2": 1.55, "z1": 0, "z2": 1 } ],
-    "*-west": [ { "x1": 0, "x2": 1, "y1": 0, "y2": 1.55, "z1": 0, "z2": 1 } ]
+    "*": [ { "x1": 0, "x2": 1, "y1": 0, "y2": 1.55, "z1": 0, "z2": 1 } ]
   }
 }

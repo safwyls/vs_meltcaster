@@ -19,7 +19,7 @@ namespace Meltcaster.Gui
         protected override double FloatyDialogAlign => 0.8;
 
         public override double DrawOrder => 0.2;
-
+        public bool IsTemporal => Attributes.GetBool("isTemporal", false);
         public GuiDialogBlockEntityMeltcaster(string dlgTitle, InventoryBase Inventory, BlockPos bePos, SyncedTreeAttribute tree, ICoreClientAPI capi) : base(dlgTitle, Inventory, bePos, capi)
         {
             if (IsDuplicate) return;
@@ -155,13 +155,17 @@ namespace Meltcaster.Gui
             m.Scale(GuiElement.scaled(0.25), GuiElement.scaled(0.25));
             ctx.Matrix = m;
             capi.Gui.Icons.DrawFlame(ctx);
-
-            double dy = 210 - 210 * (Attributes.GetFloat("fuelBurnTime", 0) / Attributes.GetFloat("maxFuelBurnTime", 1));
+            double dy = 210 - 210 * (Attributes.GetFloat("fuelBurnTime", 0) / Attributes.GetFloat("maxFuelBurnTime", 1));            
             ctx.Rectangle(0, dy, 200, 210 - dy);
             ctx.Clip();
             LinearGradient gradient = new LinearGradient(0, GuiElement.scaled(250), 0, 0);
+
+            //temporal gradient
+            //gradient.AddColorStop(0, new Color(0.08, 0.48, 0.5, 1));
+            //gradient.AddColorStop(1, new Color(0.32, 1, 0.86, 1));
             gradient.AddColorStop(0, new Color(1, 1, 0, 1));
             gradient.AddColorStop(1, new Color(1, 0, 0, 1));
+
             ctx.SetSource(gradient);
             capi.Gui.Icons.DrawFlame(ctx, 0, false, false);
             gradient.Dispose();

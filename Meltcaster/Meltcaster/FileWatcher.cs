@@ -1,13 +1,12 @@
 ﻿using System.IO;
-using System.Threading;
 using Vintagestory.API.Config;
 
 namespace Meltcaster;
 
-public class FileWatcher {
+public class FileWatcher 
+{
     private readonly FileSystemWatcher _watcher;
     private readonly MeltcasterModSystem _mod;
-    private Timer reloadTimer;
 
     public bool Queued { get; set; }
 
