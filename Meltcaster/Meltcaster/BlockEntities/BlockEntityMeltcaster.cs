@@ -737,6 +737,14 @@ namespace Meltcaster.BlockEntities
 
             if (Api?.Side == EnumAppSide.Client && (clientSidePrevBurning != IsBurning || shouldRedraw))
             {
+                if (clientSidePrevBurning != IsBurning)
+                {
+                    AssetLocation assetLocation = Block.Shape.Base.Clone().WithPathPrefixOnce("shapes/").WithPathAppendixOnce(".json");
+                    var shape = Shape.TryGet(Api, assetLocation);
+                    animUtil.activeAnimationsByAnimCode.Clear();
+                    animUtil.InitializeAnimator("Meltcaster:Meltcaster", shape);
+                }
+
                 GetBehavior<BEBehaviorFirepitAmbient>()?.ToggleAmbientSounds(IsBurning);
                 clientSidePrevBurning = IsBurning;
                 MarkDirty(true);

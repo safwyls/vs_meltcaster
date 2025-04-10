@@ -30,41 +30,52 @@ namespace Meltcaster.Blocks
 
             if (!IsExtinct && api.Side == EnumAppSide.Client)
             {
-                ringParticles = new AdvancedParticleProperties[ParticleProperties.Length * 4];
-                basePos = new Vec3f[ringParticles.Length];
+                basePos = new Vec3f[ParticleProperties.Length];
 
-                Cuboidf[] spawnBoxes = new Cuboidf[]
-                {
-                    new Cuboidf(x1: 0.125f, y1: 0, z1: 0.125f, x2: 0.3125f, y2: 0.5f, z2: 0.875f),
-                    new Cuboidf(x1: 0.7125f, y1: 0, z1: 0.125f, x2: 0.875f, y2: 0.5f, z2: 0.875f),
-                    new Cuboidf(x1: 0.125f, y1: 0, z1: 0.125f, x2: 0.875f, y2: 0.5f, z2: 0.3125f),
-                    new Cuboidf(x1: 0.125f, y1: 0, z1: 0.7125f, x2: 0.875f, y2: 0.5f, z2: 0.875f)
-                };
+                // This code used to generate particles in a ring around the firepit mesh
+                // Doesn't apply to the new model but keeping for reference
 
-                for (int i = 0; i < ParticleProperties.Length; i++)
-                {
-                    for (int j = 0; j < 4; j++)
-                    {
-                        AdvancedParticleProperties props = ParticleProperties[i].Clone();
+                //ringParticles = new AdvancedParticleProperties[ParticleProperties.Length * 4];
+                //basePos = new Vec3f[ringParticles.Length];
 
-                        Cuboidf box = spawnBoxes[j];
-                        basePos[i * 4 + j] = new Vec3f(0, 0, 0);
+                //Cuboidf[] spawnBoxes = new Cuboidf[]
+                //{
+                //    new Cuboidf(x1: 2,    x2: 5,  y1: 0, y2: 8, z1: 2, z2: 14),
+                //    new Cuboidf(x1: 11.4, x2: 14, y1: 0, y2: 8, z1: 2, z2: 14),
+                //    new Cuboidf(x1: 2,    x2: 14, y1: 0, y2: 8, z1: 2, z2: 5),
+                //    new Cuboidf(x1: 2,    x2: 14,  y1: 0, y2: 8, z1: 11.4, z2: 14),
 
-                        props.PosOffset[0].avg = box.MidX;
-                        props.PosOffset[0].var = box.Width / 2;
 
-                        props.PosOffset[1].avg = 0.1f;
-                        props.PosOffset[1].var = 0.05f;
+                //    new Cuboidf(x1: 0.125f, y1: 0, z1: 0.125f, x2: 0.3125f, y2: 0.5f, z2: 0.875f),
+                //    new Cuboidf(x1: 0.7125f, y1: 0, z1: 0.125f, x2: 0.875f, y2: 0.5f, z2: 0.875f),
+                //    new Cuboidf(x1: 0.125f, y1: 0, z1: 0.125f, x2: 0.875f, y2: 0.5f, z2: 0.3125f),
+                //    new Cuboidf(x1: 0.125f, y1: 0, z1: 0.7125f, x2: 0.875f, y2: 0.5f, z2: 0.875f)
+                //};
 
-                        props.PosOffset[2].avg = box.MidZ;
-                        props.PosOffset[2].var = box.Length / 2;
+                //for (int i = 0; i < ParticleProperties.Length; i++)
+                //{
+                //    for (int j = 0; j < 4; j++)
+                //    {
+                //        AdvancedParticleProperties props = ParticleProperties[i].Clone();
 
-                        props.Quantity.avg /= 4f;
-                        props.Quantity.var /= 4f;
+                //        Cuboidf box = spawnBoxes[j];
+                //        basePos[i * 4 + j] = new Vec3f(0, 0, 0);
 
-                        ringParticles[i * 4 + j] = props;
-                    }
-                }
+                //        props.PosOffset[0].avg = box.MidX;
+                //        props.PosOffset[0].var = box.Width / 4;
+
+                //        props.PosOffset[1].avg = 1.55f;
+                //        props.PosOffset[1].var = 0.05f;
+
+                //        props.PosOffset[2].avg = box.MidZ;
+                //        props.PosOffset[2].var = box.Length / 4;
+
+                //        props.Quantity.avg /= 4f;
+                //        props.Quantity.var /= 4f;
+
+                //        ringParticles[i * 4 + j] = props;
+                //    }
+                //}
             }
 
             interactions = ObjectCacheUtil.GetOrCreate(api, "meltcasterInteractions-lit", () =>
@@ -162,9 +173,10 @@ namespace Meltcaster.Blocks
 
             if (manager.BlockAccess.GetBlockEntity(pos) is BlockEntityMeltcaster bef)
             {
-                for (int i = 0; i < ringParticles.Length; i++)
+                for (int i = 0; i < ParticleProperties.Length; i++)
                 {
-                    AdvancedParticleProperties bps = ringParticles[i];
+                    AdvancedParticleProperties bps = ParticleProperties[i];
+                    basePos[i] = new Vec3f(0, 0, 0);
                     bps.WindAffectednesAtPos = windAffectednessAtPos;
                     bps.basePos.X = pos.X + basePos[i].X;
                     bps.basePos.Y = pos.Y + basePos[i].Y;
@@ -172,6 +184,10 @@ namespace Meltcaster.Blocks
 
                     manager.Spawn(bps);
                 }
+                //foreach (var pp in ParticleProperties)
+                //{
+                //    manager.Spawn(pp);
+                //}
 
                 return;
             }
