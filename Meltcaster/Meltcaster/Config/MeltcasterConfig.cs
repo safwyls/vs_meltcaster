@@ -1,27 +1,94 @@
 ﻿using HarmonyLib;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Channels;
 using Vintagestory.API.Common;
+using Vintagestory.API.Config;
 
 namespace Meltcaster.Config
 {
     public class MeltcasterConfig
     {
+        private static ILogger ModLogger => MeltcasterModSystem.Instance.Logger;
         public required List<MeltcastRecipe> MeltcastRecipes { get; set; }
+
+        public required string RecipesPath { get; set; } = "meltcaster/recipes/";
 
         [JsonIgnore]
         public Dictionary<AssetLocation, MeltcastRecipe>? MeltcastRecipeByCode { get; private set; }
 
+        private static bool IsRecipeValid(MeltcastRecipe? recipe, string file)
+        {
+            var fileName = Path.GetFileName(file);
+            if (recipe == null) return false;
+
+            // Check input
+            if (string.IsNullOrEmpty(recipe.Input?.Code?.ToShortString()))
+            {
+                ModLogger.Error($"Missing input code: {fileName}");
+                return false;
+            }
+
+            //Check output
+            if (recipe.Output == null || recipe.Output.Count == 0)
+            {
+                ModLogger.Error($"Empty output: {fileName}");
+                return false;
+            }
+            
+            //Check temp and time
+            if (recipe.MeltcastTemp <= 0 || recipe.MeltcastTime <= 0)
+            {
+                ModLogger.Error($"Invalid temp/time: {fileName}");
+                return false;
+            }
+            
+            return true;
+        }
+
+        public void LoadIndependentRecipes()
+        {
+            string recipeFolder = Path.Combine(GamePaths.ModConfig, RecipesPath);
+
+            if (Directory.Exists(recipeFolder))
+            {
+                foreach (string file in Directory.GetFiles(recipeFolder, "*.json", SearchOption.AllDirectories))
+                {
+                    try
+                    {
+                        var recipe = JsonConvert.DeserializeObject<MeltcastRecipe>(File.ReadAllText(file));
+                        if (IsRecipeValid(recipe, file))
+                        {
+                            MeltcastRecipes.Add(recipe);
+                            ModLogger.Notification($"Loaded recipe: {Path.GetFileName(file)}");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ModLogger.Error($"Failed to load {file}: {e.Message}");
+                    }
+                }
+            }
+            else
+            {
+                Directory.CreateDirectory(recipeFolder);
+                ModLogger.Warning($"Recipe folder did not exist. Created @ {Path.GetDirectoryName(recipeFolder)}");
+            }
+        }
+
         public void ResolveAll(IWorldAccessor world, string domain = "meltcaster")
         {
-            foreach(var recipe in MeltcastRecipes)
+            LoadIndependentRecipes();
+
+            foreach (var recipe in MeltcastRecipes)
             {
                 recipe?.Input?.Resolve(world, domain);
                 if (recipe?.Input.ResolvedItemstack is null)
                 {
-                    world.Logger.Error($"[Meltcaster] Failed to resolve input itemstack for recipe input: {recipe?.Input?.Code}");
+                    ModLogger.Error($"Failed to resolve input itemstack for recipe input: {recipe?.Input?.Code}");
                 }
 
                 if (recipe?.Output == null) return;
@@ -30,7 +97,7 @@ namespace Meltcaster.Config
                     output.Resolve(world, domain);
                     if (output.ResolvedItemstack is null && !output.IsGroup)
                     {
-                        world.Logger.Error($"[Meltcaster] Failed to resolve recipe output itemstack: {output.Code}");
+                        ModLogger.Error($"Failed to resolve recipe output itemstack: {output.Code}");
                     }
                 }
 
@@ -50,6 +117,7 @@ namespace Meltcaster.Config
         public static MeltcasterConfig GetDefault()
         {
             return new MeltcasterConfig() {
+                RecipesPath = "meltcaster/recipes/",
                 MeltcastRecipes = new List<MeltcastRecipe>()
                 {
                     new()
@@ -156,7 +224,7 @@ namespace Meltcaster.Config
                     output.Resolve(resolver, sourceForErrorLogging, printWarningOnError);
                     if (output.ResolvedItemstack is null)
                     {
-                        resolver.Logger.Error($"[Meltcaster] Failed to resolve recipe output itemstack for Group: {Code}, output: {output.Code}");
+                        resolver.Logger.Error($"[meltcaster] Failed to resolve recipe output itemstack for Group: {Code}, output: {output.Code}");
                     }
                 }
 

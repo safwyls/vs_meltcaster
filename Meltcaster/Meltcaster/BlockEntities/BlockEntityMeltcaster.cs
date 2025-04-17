@@ -15,6 +15,7 @@ namespace Meltcaster.BlockEntities
 {
     internal class BlockEntityMeltcaster : BlockEntityOpenableContainer
     {
+        private static ILogger ModLogger => MeltcasterModSystem.Instance.Logger;
         private MeltcasterConfig? Config => MeltcasterModSystem.Config;
         private MeltcastOutput? selectedOutput = null;
         private int itemsRemainingForGroup = 0;
@@ -574,7 +575,7 @@ namespace Meltcaster.BlockEntities
 
                 if (output is null)
                 {
-                    api.Logger.Error("[Meltcaster] Output is null. This should not happen. Did one of your recipes fail to resolve?");
+                    ModLogger.Error("Output is null. This should not happen. Did one of your recipes fail to resolve?");
                     continue;
                 }
 
@@ -591,7 +592,7 @@ namespace Meltcaster.BlockEntities
                 }
                 else
                 {
-                    stackToAdd = output.ResolvedItemstack.Clone();
+                    stackToAdd = output.ResolvedItemstack?.Clone();
                 }
 
                 if (stackToAdd == null) continue;
@@ -766,7 +767,7 @@ namespace Meltcaster.BlockEntities
 
                 if (Config == null || Config.MeltcastRecipeByCode == null)
                 {
-                    Api.Logger.Warning("[Meltcaster] Config not ready when calling SetDialogValues.");
+                    ModLogger.Warning("Config not ready when calling SetDialogValues.");
                     return;
                 }
 
