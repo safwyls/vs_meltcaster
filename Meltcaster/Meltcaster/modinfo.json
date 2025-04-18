@@ -7,7 +7,7 @@
     "murazama"
   ],
   "description": "Allows you to melt and recast items into other items. Recipes are fully json configurable!",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "dependencies": {
     "game": "1.20.6"
   }

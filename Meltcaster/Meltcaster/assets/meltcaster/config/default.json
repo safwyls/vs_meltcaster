@@ -1,24 +1,4 @@
 {
-  meltcastrecipes: [
-    
-    {
-      input: { code: "game:metal-parts", type: "block", stacksize: 1 },
-      meltcasttemp: 1200,
-      meltcasttime: 60,
-      output: [
-        {
-          code: "meltcaster:g-jonas-metal-bits",
-          stacksize: 1,
-          chance: 1,
-          group: [
-            { code: "game:metalbit-cupronickel", type: "item", stacksize: 1, chance: 1 },
-            { code: "game:metalbit-iron", type: "item", stacksize: 1, chance: 0.7 },
-            { code: "game:metalbit-steel", type: "item", stacksize: 1, chance: 0.5 },
-          ],
-        },
-        { code: "game:gear-rusty", type: "item", stacksize: 1, chance: 0.01 },
-        { code: "game:gear-temporal", type: "item", stacksize: 1, chance: 0.02 },
-      ],
-    },    
-  ],
+  recipesPath: "meltcaster/recipes",
+  meltcastRecipes: [],
 }

@@ -10,6 +10,7 @@
         code: "meltcaster:g-metal-bits",
         stacksize: 1,
         chance: 1,
+        grouprollinterval: 4,
         group: [
           { code: "game:metalbit-copper", type: "item", stacksize: 1, chance: 1 },
           { code: "game:metalbit-tinbronze", type: "item", stacksize: 1, chance: 0.7 },
