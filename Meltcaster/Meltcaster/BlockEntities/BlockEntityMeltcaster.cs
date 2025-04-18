@@ -17,8 +17,6 @@ namespace Meltcaster.BlockEntities
     {
         private static ILogger ModLogger => MeltcasterModSystem.Instance.Logger;
         private MeltcasterConfig? Config => MeltcasterModSystem.Config;
-        private MeltcastOutput? selectedOutput = null;
-        private int itemsRemainingForGroup = 0;
 
         internal InventoryMeltcasting inventory;
 
@@ -557,6 +555,8 @@ namespace Meltcaster.BlockEntities
 
         public virtual void DoMeltcast(IWorldAccessor world, ItemSlot inputSlot, ItemSlot[] outputSlots)
         {
+            int itemsRemainingForGroup = 0;
+            MeltcastOutput? groupOutput = null;
             // 1. Check if the item is in the Meltcast list
             if (!CanMeltcast(world, inputSlot.Itemstack)) return;
 
@@ -582,13 +582,19 @@ namespace Meltcaster.BlockEntities
                 ItemStack? stackToAdd;
                 if (output.IsGroup)
                 {
+                    groupOutput = output;
+                    itemsRemainingForGroup = inputStack.Attributes.GetInt($"{groupOutput.Code}-itemsRemaining", 0);
+                    ItemStack? selectedOutput = inputStack.Attributes.GetItemstack($"{groupOutput.Code}-selectedOutput");
+
                     if (selectedOutput == null || itemsRemainingForGroup <= 0)
                     {
-                        selectedOutput = output.WeightedRandom(api);
-                        itemsRemainingForGroup = output.GroupRollInterval ?? 16;
+                        selectedOutput = output.WeightedRandom(api)?.ResolvedItemstack;
+                        itemsRemainingForGroup = groupOutput.GroupRollInterval ?? 16;
+                        inputStack.Attributes.SetInt($"{groupOutput.Code}-itemsRemaining", itemsRemainingForGroup);
+                        inputStack.Attributes.SetItemstack($"{groupOutput.Code}-selectedOutput", selectedOutput);
                     }
 
-                    stackToAdd = selectedOutput?.ResolvedItemstack?.Clone();
+                    stackToAdd = selectedOutput?.Clone();
                 }
                 else
                 {
@@ -661,8 +667,12 @@ namespace Meltcaster.BlockEntities
             inputSlot.TakeOut(1);
             inputSlot.MarkDirty();
 
-            // 5.
-            itemsRemainingForGroup--;
+            // 5. If the group output was used, decrease the items remaining
+            if (groupOutput != null)
+            {
+                itemsRemainingForGroup--;
+                inputStack?.Attributes.SetInt($"{groupOutput.Code}-itemsRemaining", itemsRemainingForGroup);
+            }
         }
 
         #region Events

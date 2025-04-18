@@ -13,9 +13,8 @@ namespace Meltcaster.Config
     public class MeltcasterConfig
     {
         private static ILogger ModLogger => MeltcasterModSystem.Instance.Logger;
+        public required string RecipesPath { get; set; } = Path.Combine("meltcaster", "recipes");
         public required List<MeltcastRecipe> MeltcastRecipes { get; set; }
-
-        public required string RecipesPath { get; set; } = "meltcaster/recipes/";
 
         [JsonIgnore]
         public Dictionary<AssetLocation, MeltcastRecipe>? MeltcastRecipeByCode { get; private set; }
@@ -49,7 +48,8 @@ namespace Meltcaster.Config
             return true;
         }
 
-        public void LoadIndependentRecipes()
+        // Checks ModConfig/meltcaster/recipes/ for any custom recipes
+        public void LoadIndependentRecipes(ICoreAPI api)
         {
             string recipeFolder = Path.Combine(GamePaths.ModConfig, RecipesPath);
 
@@ -59,11 +59,15 @@ namespace Meltcaster.Config
                 {
                     try
                     {
-                        var recipe = JsonConvert.DeserializeObject<MeltcastRecipe>(File.ReadAllText(file));
-                        if (IsRecipeValid(recipe, file))
+                        var recipes = JsonConvert.DeserializeObject<MeltcastRecipe[]>(File.ReadAllText(file));
+                        if (recipes is null) continue;
+                        foreach (var recipe in recipes)
                         {
-                            MeltcastRecipes.Add(recipe);
-                            ModLogger.Notification($"Loaded recipe: {Path.GetFileName(file)}");
+                            if (IsRecipeValid(recipe, file))
+                            {
+                                MeltcastRecipes.Add(recipe);
+                                ModLogger.Notification($"Loaded recipe: {Path.GetFileName(file)}");
+                            }
                         }
                     }
                     catch (Exception e)
@@ -76,12 +80,20 @@ namespace Meltcaster.Config
             {
                 Directory.CreateDirectory(recipeFolder);
                 ModLogger.Warning($"Recipe folder did not exist. Created @ {Path.GetDirectoryName(recipeFolder)}");
+
+                var example = api.Assets.Get(new AssetLocation(Path.Combine("meltcaster:config","recipes","example.json")));
+                if (example != null)
+                {
+                    File.WriteAllText(Path.Combine(recipeFolder, "example.json"), example.ToText());
+                    ModLogger.Notification($"Created default recipe: {Path.GetFileName(example.Location)}");
+                    LoadIndependentRecipes(api);
+                }
             }
         }
 
         public void ResolveAll(IWorldAccessor world, string domain = "meltcaster")
         {
-            LoadIndependentRecipes();
+            LoadIndependentRecipes(world.Api);
 
             foreach (var recipe in MeltcastRecipes)
             {
@@ -117,46 +129,8 @@ namespace Meltcaster.Config
         public static MeltcasterConfig GetDefault()
         {
             return new MeltcasterConfig() {
-                RecipesPath = "meltcaster/recipes/",
+                RecipesPath = Path.Combine("meltcaster","recipes"),
                 MeltcastRecipes = new List<MeltcastRecipe>()
-                {
-                    new()
-                    {
-                        Input = new() { Code = "game:metal-scraps", Type = EnumItemClass.Block },
-                        MeltcastTemp = 1200,
-                        MeltcastTime = 60,
-                        Output = new List<MeltcastOutput>()
-                        {
-                            new() { Code = "meltcast:g-metal-bits", StackSize = 1, Chance = 1,
-                                Group = new() {
-                                    new() { Code = "game:metalbit-copper", Type = EnumItemClass.Item, StackSize = 1, Chance = 1f },
-                                    new() { Code = "game:metalbit-tinbronze", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.7f },
-                                    new() { Code = "game:metalbit-bismuthbronze", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.6f },
-                                    new() { Code = "game:metalbit-blackbronze", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.5f },
-                                    new() { Code = "game:metalbit-iron", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.5f },
-                                    new() { Code = "game:metalbit-steel", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.4f },
-                                    new() { Code = "game:metalbit-nickel", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.3f },
-                                    new() { Code = "game:metalbit-lead", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.3f },
-                                    new() { Code = "game:metalbit-zinc", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.3f },
-                                    new() { Code = "game:metalbit-bismuth", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.3f },
-                                    new() { Code = "game:metalbit-molybdochalkos", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.3f },
-                                    new() { Code = "game:metalbit-cupronickel", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.2f },
-                                    new() { Code = "game:metalbit-brass", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.2f },
-                                    new() { Code = "game:metalbit-chromium", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.2f },
-                                    new() { Code = "game:metalbit-silver", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.2f },
-                                    new() { Code = "game:metalbit-leadsolder", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.2f },
-                                    new() { Code = "game:metalbit-silversolder", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.1f },
-                                    new() { Code = "game:metalbit-meteoriciron", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.1f },
-                                    new() { Code = "game:metalbit-gold", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.1f },
-                                    new() { Code = "game:metalbit-electrum", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.05f },
-                                    new() { Code = "game:metalbit-titanium", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.05f },
-                                }
-                            },
-                            new() { Code = "game:gear-rusty", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.05f },
-                            new() { Code = "game:gear-temporal", Type = EnumItemClass.Item, StackSize = 1, Chance = 0.01f },
-                        }
-                    }
-                }
             };
         }
     }

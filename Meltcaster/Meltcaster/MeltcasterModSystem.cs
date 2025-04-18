@@ -44,8 +44,6 @@ namespace Meltcaster
 
             // Wait til all assets are loaded to resolve recipes in config
             ReloadConfig(api);
-            //Config?.ResolveAll(api.World);
-            //Mod.Logger.Notification($"Loaded {Config?.MeltcastRecipes.ToArray().Where(r => r.Input.ResolvedItemstack != null).Count() ?? 0} meltcasting recipes.");
         }
 
         public void ReloadConfig(ICoreAPI api)

@@ -26,6 +26,7 @@ public class FileWatcher
 
         foreach (var (path, filter, scanSubDir) in paths)
         {
+            if (!Directory.Exists(path)) continue;
             var watcher = new FileSystemWatcher(path)
             {
                 Filter = filter,
