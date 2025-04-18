@@ -1,83 +1,104 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 
 namespace Meltcaster;
 
 public class FileWatcher 
 {
-    private readonly FileSystemWatcher _watcher;
     private readonly MeltcasterModSystem _mod;
+    private DateTime lastChange = DateTime.MinValue;
+    private readonly List<FileSystemWatcher> watchers = new();
+    private static ILogger ModLogger => MeltcasterModSystem.Instance.Logger;
 
     public bool Queued { get; set; }
 
     public FileWatcher(MeltcasterModSystem mod) {
         _mod = mod;
 
-        _watcher = new FileSystemWatcher(GamePaths.ModConfig) {
-            Filter = $"{mod.ModId}.json",
-            IncludeSubdirectories = false,
-            EnableRaisingEvents = true
+        var paths = new[]
+        {
+            (GamePaths.ModConfig, $"{mod.ModId}.json", false),
+            (Path.Combine(GamePaths.ModConfig, "meltcaster", "recipes"), "*.json", true)
         };
 
-        _watcher.Changed += Changed;
-        _watcher.Created += Changed;
-        _watcher.Deleted += Changed;
-        _watcher.Renamed += Changed;
-        _watcher.Error += Error;
+        foreach (var (path, filter, scanSubDir) in paths)
+        {
+            if (!Directory.Exists(path)) continue;
+            var watcher = new FileSystemWatcher(path)
+            {
+                Filter = filter,
+                IncludeSubdirectories = scanSubDir,
+                EnableRaisingEvents = true
+            };
+
+            watcher.Changed += Changed;
+            watcher.Created += Changed;
+            watcher.Deleted += Changed;
+            watcher.Renamed += Changed;
+            watcher.Error += Error;
+
+            watchers.Add(watcher);
+        }
     }
 
     private void Changed(object sender, FileSystemEventArgs e)
     {
+        // Debounce chcnages
+        var now = DateTime.UtcNow;
+        if ((now - lastChange).TotalMilliseconds < 200) return;
+
+        lastChange = now;
         _mod.Api.Event.EnqueueMainThreadTask(() => QueueReload(true), "queueReload");
     }
 
     private void Error(object sender, ErrorEventArgs e) {
-        _mod.Api.Logger.Error(e.GetException().ToString());
+        ModLogger.Error(e.GetException().ToString());
         _mod.Api.Event.EnqueueMainThreadTask(() => QueueReload(), "queueReload");
     }
 
     /// <summary>
-    /// My workaround for <a href='https://github.com/dotnet/runtime/issues/24079'>dotnet#24079</a>.
+    /// Workaround for <a href='https://github.com/dotnet/runtime/issues/24079'>dotnet#24079</a>.
     /// </summary>
     private void QueueReload(bool changed = false) 
     {
-        // check if already queued for reload
-        if (Queued)
-        {
-            return;
-        }
+        // Check if already queued for reload
+        if (Queued) return;
 
-        // mark as queued
+        // Mark as queued
         Queued = true;
 
-        // inform console/log
-        if (changed)
-        {
-            _mod.Api.Logger.Event("Detected meltcaster config was changed, reloading.");
-        }
+        // Inform console/log
+        if (changed) ModLogger.Event("Detected meltcaster config was changed, reloading.");
 
-        // wait for other changes to process
-        _mod.Api.Event.RegisterCallback(_ =>
-        {
-            // reload the config
+        // Wait for other changes to process
+        _mod.Api.Event.RegisterCallback(_ => {
+            // Reload the config
             _mod.ReloadConfig(_mod.Api);
 
-            // wait some more to remove this change from the queue since the reload triggers another write
-            _mod.Api.Event.RegisterCallback(_ =>
-            {
-                // unmark as queued
+            // Wait some more to remove this change from the queue since the reload triggers another write
+            _mod.Api.Event.RegisterCallback(_ => {
+                // Unmark as queued
                 Queued = false;
             }, 100);
         }, 100);
     }
 
-    public void Dispose() {
-        _watcher.Changed -= Changed;
-        _watcher.Created -= Changed;
-        _watcher.Deleted -= Changed;
-        _watcher.Renamed -= Changed;
-        _watcher.Error -= Error;
+    public void Dispose() 
+    {
+        foreach (var watcher in watchers)
+        {
+            watcher.EnableRaisingEvents = false;
+            watcher.Changed -= Changed;
+            watcher.Created -= Changed;
+            watcher.Deleted -= Changed;
+            watcher.Renamed -= Changed;
+            watcher.Error -= Error;
+            watcher.Dispose();
+        }
 
-        _watcher.Dispose();
+        watchers.Clear();
     }
 }
