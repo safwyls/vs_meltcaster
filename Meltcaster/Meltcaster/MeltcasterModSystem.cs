@@ -19,7 +19,7 @@ namespace Meltcaster
         public ILogger Logger => Mod.Logger;
         public string ModId => Mod.Info.ModID;
         private FileWatcher? _fileWatcher;
-        private bool assetsFinalized = false;
+        public bool AssetsFinalized { get; private set; } = false;
 
         public override void Start(ICoreAPI api)
         {
@@ -38,7 +38,7 @@ namespace Meltcaster
 
         public override void AssetsFinalize(ICoreAPI api)
         {
-            assetsFinalized = true;
+            AssetsFinalized = true;
             
             Mod.Logger.Debug("Assets finalized. Loading config...");
 
@@ -50,28 +50,19 @@ namespace Meltcaster
         {
             (_fileWatcher ??= new FileWatcher(this)).Queued = true;
             
-            try
+            var _config = api.LoadModConfig<MeltcasterConfig>("meltcaster.json");
+            if (_config == null)
             {
-                var _config = api.LoadModConfig<MeltcasterConfig>("meltcaster.json");
-                if (_config == null)
-                {
-                    Mod.Logger.Warning("Missing config! Using default.");
-                    Config = api.Assets.Get(new AssetLocation("meltcaster:config/default.json")).ToObject<MeltcasterConfig>();
-                    api.StoreModConfig(Config, "meltcaster.json");
-                }
-                else
-                {
-                    Config = _config;
-                }
-            }
-            catch (Exception ex)
-            {
-                Mod.Logger.Error("Could not load mod config! Trying to generate from scratch instead.");
-                Mod.Logger.Error(ex);
+                Mod.Logger.Warning("Missing config! Using default.");
                 Config = MeltcasterConfig.GetDefault();
+                api.StoreModConfig(Config, "meltcaster.json");
+            }
+            else
+            {
+                Config = _config;
             }
 
-            if (assetsFinalized)
+            if (AssetsFinalized)
             {
                 Config?.ResolveAll(api.World);
                 Mod.Logger.Notification($"Loaded {Config?.MeltcastRecipes.ToArray().Where(r => r.Input.ResolvedItemstack != null).Count() ?? 0} meltcasting recipes.");

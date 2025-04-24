@@ -52,10 +52,23 @@ namespace Meltcaster.Config
         public void LoadIndependentRecipes(ICoreAPI api)
         {
             string recipeFolder = Path.Combine(GamePaths.ModConfig, RecipesPath);
+            string examplePath = Path.Combine(recipeFolder, "example.json");
 
             if (Directory.Exists(recipeFolder))
             {
-                foreach (string file in Directory.GetFiles(recipeFolder, "*.json", SearchOption.AllDirectories))
+                string[] files = Directory.GetFiles(recipeFolder, "*.json", SearchOption.AllDirectories);
+
+                if (!File.Exists(examplePath)) 
+                {
+                    var example = api.Assets.Get(new AssetLocation("meltcaster:config/recipes/example.json"));
+                    if (example != null)
+                    {
+                        File.WriteAllText(examplePath, example.ToText());
+                        ModLogger.Notification($"Created default recipe: {Path.GetFileName(example.Location)}");
+                    }
+                }
+
+                foreach (string file in files)
                 {
                     try
                     {
@@ -81,10 +94,10 @@ namespace Meltcaster.Config
                 Directory.CreateDirectory(recipeFolder);
                 ModLogger.Warning($"Recipe folder did not exist. Created @ {Path.GetDirectoryName(recipeFolder)}");
 
-                var example = api.Assets.Get(new AssetLocation(Path.Combine("meltcaster:config","recipes","example.json")));
+                var example = api.Assets.Get(new AssetLocation("meltcaster:config/recipes/example.json"));
                 if (example != null)
                 {
-                    File.WriteAllText(Path.Combine(recipeFolder, "example.json"), example.ToText());
+                    File.WriteAllText(examplePath, example.ToText());
                     ModLogger.Notification($"Created default recipe: {Path.GetFileName(example.Location)}");
                     LoadIndependentRecipes(api);
                 }

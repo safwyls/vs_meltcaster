@@ -77,7 +77,7 @@ namespace Meltcaster.BlockEntities
         void SetTemp(ItemStack stack, float value)
         {
             if (stack == null) return;
-            stack.Collectible.SetTemperature(Api.World, stack, value);
+            stack.Collectible?.SetTemperature(Api.World, stack, value);
         }
 
         public bool IsBurning
@@ -294,6 +294,8 @@ namespace Meltcaster.BlockEntities
         {
             // Only tick on the server and merely sync to client
             if (Api is ICoreClientAPI) return;
+
+            if (!MeltcasterModSystem.Instance.AssetsFinalized) return;
 
             // Use up fuel
             if (fuelBurnTime > 0)
@@ -550,7 +552,7 @@ namespace Meltcaster.BlockEntities
         
         public bool CanHeatOutput(ItemStack outputStack)
         {
-            return outputStack?.Collectible.CombustibleProps != null;
+            return outputStack?.Collectible?.CombustibleProps != null;
         }
 
         public virtual void DoMeltcast(IWorldAccessor world, ItemSlot inputSlot, ItemSlot[] outputSlots)
@@ -618,7 +620,7 @@ namespace Meltcaster.BlockEntities
                     }
 
                     if (slot.Itemstack.Collectible.Equals(stackToAdd.Collectible) &&
-                        slot.Itemstack.StackSize + stackToAdd.StackSize <= slot.Itemstack.Collectible.MaxStackSize)
+                        slot.Itemstack.StackSize + stackToAdd.StackSize <= slot.Itemstack.Collectible?.MaxStackSize)
                     {
                         slot.Itemstack.StackSize += stackToAdd.StackSize;
                         slot.MarkDirty();
